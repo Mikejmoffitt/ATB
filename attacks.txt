@@ -4,10 +4,10 @@ Michael Moffitt Nov 5 2013
 Each character has an attacks file. This contains information about the
 character's moves that are all activated by hitting buttons at the right time.
 The file is internally an INI file, and each section describes one attack.
-There are 36 normal attack slots, 36 close normal attack slots, 32 command 
+There are 48 normal attack slots, 48 close normal attack slots, 32 command 
 slots, and 16 charge slots.
 
-This may seem alarming - that's 120 slots! - however, most will not be
+This may seem alarming - that's a lot of slots! - however, most will not be
 filed. 
 
 == ATTACK SLOTS ==
@@ -22,6 +22,9 @@ one of the following each:
 **Neutral in air
  -Holding back in air
  -Holding forward in air
+**Neutral moving in air
+ -Holding moving back in air
+ -Holding moving forward in air
 **Neutral crouching
  -Holding back while crouching
  -Holding forward while crouching
@@ -30,6 +33,9 @@ one of the following each:
  -Neutral ground
  -Holding back on ground
  -Holding forward on ground
+ -Neutral moving in air
+ -Holding moving back in air
+ -Holding moving forward in air
  -Neutral in air
  -Holding back in air
  -Holding forward in air
@@ -65,6 +71,11 @@ nearly straight up (which is her launch in the Marvel series typically).
 
 Like before, if a "close" version is not enabled, it will default to its non-
 close counterpart. Special attacks do not have close versions, by the way.
+
+Finally, air attacks differentiate between whether the player is doing an 
+angled jump or a straight-up neutral one. In other words, if vecX == 0 or not.
+Like the above ones, if there is no special "moving" version of an air attack
+it will default to the normal one.
 
 This means that the attacks that have been marked with an asterisk are the only
 ones that are strictly required by the game engine to be present. In other 
