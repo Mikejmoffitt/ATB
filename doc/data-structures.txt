@@ -1,0 +1,11 @@
+I guess data structures isn't a good name. It's more like player structure.
+
+
+We have this Controller class that listens for inputs and presents a nice easy
+public array to read keys being pressed. This is mostly re-used code from
+Ghost in the Machine.
+
+The Player class has these classes in it:
+	Controller*
+	Sprite*
+	GameState*

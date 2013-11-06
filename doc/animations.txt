@@ -1,8 +1,8 @@
 == ANIMATION FORMAT ==
+
 [Animation number]
-	loop = bool
-	loopback = int
-	frameName = string[]
+	loop = int (-1 to stay on final frame)
+	frameName = string[] (filename of the animation frame itself)
 	xoff = int[]
 	yoff = int[]
 	durations = int[]
