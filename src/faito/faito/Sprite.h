@@ -1,7 +1,7 @@
 /*
 
 ATB Sprite Class
-This class is the representation of the fighter. It stores bitmap data
+This class is the graphic representation of the fighter. It stores bitmap data
 for animations, as well as hitbox data, and can be told to play a certain 
 animation, check for box collisions with another passed sprite, and be
 instructed to be blitted somewhere on screen. 
@@ -26,6 +26,12 @@ instructed to be blitted somewhere on screen.
 #define ANIM_DIR "/anim/"
 #define ANIM_FORMAT ".png"
 
+#define BOX_BODY 0
+#define BOX_VULN0 1
+#define BOX_VULN1 2
+#define BOX_VULN2 3
+#define BOX_ATTACK 4
+
 class Sprite
 {
 public:
@@ -38,7 +44,7 @@ public:
 	// loop[6]
 	int loop[ANIM_NUM];
 
-	// For things with double level hierarchy, like animation frames, the format
+	// For things with 2 level hierarchy, like animation frames, the format
 	// is an array of vectors (keeping vector usage single-dimensional).
 	// I would try to get frame[which animation][which frame].
 	std::vector<ALLEGRO_BITMAP*> frames[ANIM_NUM];
@@ -50,8 +56,8 @@ public:
 	// the format will be [box num][anim number][frame] where the last one is a
 	// vector of integers.
 
-	std::vector<int> boxX[NUM_BOXES][ANIM_NUM]; // X offset from top-left of sprite
-	std::vector<int> boxY[NUM_BOXES][ANIM_NUM]; // Y offset
+	std::vector<int> boxX[NUM_BOXES][ANIM_NUM]; // X offset from top-left 
+	std::vector<int> boxY[NUM_BOXES][ANIM_NUM]; // Y offset from top-left
 	std::vector<int> boxW[NUM_BOXES][ANIM_NUM]; // Width
 	std::vector<int> boxH[NUM_BOXES][ANIM_NUM]; // Height
 
