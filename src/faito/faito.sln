@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "faito", "faito\faito.vcxproj", "{DD2D12BB-4298-40BA-864A-2B3002B1CCCE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD2D12BB-4298-40BA-864A-2B3002B1CCCE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DD2D12BB-4298-40BA-864A-2B3002B1CCCE}.Debug|Win32.Build.0 = Debug|Win32
+		{DD2D12BB-4298-40BA-864A-2B3002B1CCCE}.Release|Win32.ActiveCfg = Release|Win32
+		{DD2D12BB-4298-40BA-864A-2B3002B1CCCE}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
