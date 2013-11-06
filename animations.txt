@@ -1,0 +1,28 @@
+== ANIMATION FORMAT ==
+[Animation number]
+	loop = bool
+	loopback = int
+	frameName = string[]
+	xoff = int[]
+	yoff = int[]
+	durations = int[]
+	box0x = int[] // Body box
+	box0y = int[]
+	box0w = int[]
+	box0h = int[]
+	box1x = int[] // Vuln box 1
+	box1y = int[]
+	box1w = int[]
+	box1h = int[]
+	box2x = int[] // Vuln box 2
+	box2y = int[]
+	box2w = int[]
+	box2h = int[]
+	box3x = int[] // Vuln box 3
+	box3y = int[]
+	box3w = int[]
+	box3h = int[]
+	box4x = int[] // Attack box
+	box4y = int[]
+	box4w = int[]
+	box4h = int[]
