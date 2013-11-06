@@ -1,0 +1,51 @@
+== Introduction ==
+
+ATB is a possible working title for this fighting game. We'll see what we use.
+ATB stands for "Attack throw block". These are the three basic actions a player
+can do in a match that gives a traditional fighting game its rock-paper-scissors
+nature. This is a game founded on the fundamentals found at the heart of all
+fighting games. The aim of the game is to feature gameplay centered around
+zoning, footsies, reactions, and priority. There will be little to no link
+combos, with combos being limited to normals canceling into specials.
+
+== Input Scheme ==
+
+One thing that will set ATB apart from other fighting games is that the inputs
+are more approachable compared to more popular games. While many fighting games
+have as many as eight buttons, this one has simply two, similar to a Game Boy.
+ 
+
+The inputs are meant to be usable on a Neo Geo Pocket Color. This is not just
+from an unreasonable love for that system, but also because a two-button system
+is approachable for those new to games. 
+
+Controls are based on Capcom VS SNK for NGPC:
+	up/down/left/right are what they appear to be
+	The A and B buttons are punch and kick buttons.
+	
+While there are two buttons, there are two levels of attack. Again, like CvS:
+	-A light tap of a punch button produces a light punch
+	-A longer tap of a punch button (~4+ frames)
+
+However, the problem with this system is that this implies all button inputs
+are followed by a minimum of 4 frames of delay before they may be processed.
+The solution here lies in the implementation. 
+
+Here is how it goes - we are assuming the player is already in a situation
+where inputs can be received (not in hitstun, not blocking):
+
+receiveInputs():
+if button is pressed:
+	if the player is in neutral stance:
+		run light attack sequence
+	if light sequence is at nth frame of startup and button is pressed:
+		cancel into hard attack sequence
+		
+This also implies that the hard attack sequnece has little to no startup, as 
+the first [n] frames of the light attack sequence are effectively used as the 
+startup of the hard attack. The advantage to this is that the lag issue of a 
+multi-tier input system is circumvented. This could be implemented for more than
+just a light-to-hard system if desired, though the coordination of startups for 
+attacks would have to be much tighter. A caveat is that the startup for the hard
+attack must not be very different from the light one or the attack will appear
+awkward.
