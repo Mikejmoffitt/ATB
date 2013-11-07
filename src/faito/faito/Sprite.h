@@ -38,12 +38,15 @@ public:
 
 	std::string charName;
 	Sprite(std::string name);
+	~Sprite();
 
 	// Blits current appropriate frame
 	void blit(int x, int y);
 
 	// Like above, but renders hitboxes
 	void boxBlit(int x, int y, int box);
+
+	// Gets the frame for the current animation (for rendering)
 	ALLEGRO_BITMAP* getFrame();
 
 	// A single animation tick is activated here
