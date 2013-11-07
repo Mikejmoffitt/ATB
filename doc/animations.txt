@@ -1,5 +1,24 @@
 == ANIMATION FORMAT ==
 
+Hopefully we'll make a program to help us do this.
+
+The animation numbers should start at 0 and go up sequentially. Once the game
+sees that an animation number section does not exist, it decides, "oh, we are
+done loading animations now. That is all of the animations."
+
+Which animations correspond to which attacks / stances / whatever is not
+important. As described in the attack documentation an attack can be assigned
+an arbitrary animation. Things like standing, jumping, etc. will face a 
+similar configuration structure alongside meta-info like stamina, physics stats
+and all that other jazz. So just make animations.
+
+As it's just an INI file comments can be put like this:
+
+;this is a comment.
+
+I highly recommend a comment describing the nature of the animation to make 
+assignments easier later. 
+
 [Animation number]
 	loop = int (-1 to stay on final frame)
 	frameName = string[] (filename of the animation frame itself)
@@ -25,4 +44,4 @@
 	box4x = int[] // Attack box
 	box4y = int[]
 	box4w = int[]
-	box4h = int[]
+	box4h = int[]?

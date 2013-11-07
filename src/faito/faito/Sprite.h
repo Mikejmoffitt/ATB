@@ -7,9 +7,7 @@ animation, check for box collisions with another passed sprite, and be
 instructed to be blitted somewhere on screen. 
 
 */
-
-#ifndef SPRITE_H
-#define SPRITE_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -46,9 +44,6 @@ public:
 	// Like above, but renders hitboxes
 	void boxBlit(int x, int y, int box);
 
-	// Gets the frame for the current animation (for rendering)
-	ALLEGRO_BITMAP* getFrame();
-
 	// A single animation tick is activated here
 	void animate();
 
@@ -71,6 +66,12 @@ public:
 	unsigned int numFrames(int num);
 
 private:
+	
+	// Accessors for readability
+	ALLEGRO_BITMAP* getFrame();
+
+	// Which animation slots are actually used
+	int numAnimations;
 
 	// Animation state variables
 	int animNum; // Which animation is being played
@@ -81,10 +82,13 @@ private:
 	// For example to check whether animation 6 loops I would look at 
 	// loop[6]
 	int loop[ANIM_NUM];
+	int animLength[ANIM_NUM];
+
+	// THESE ARE ARRAYS OF VECTORS. NOT THE OTHER WAY AROUND.
 
 	// For things with 2 level hierarchy, like animation frames, the format
 	// is an array of vectors (keeping vector usage single-dimensional).
-	// I would try to get frame[which animation][which frame].
+	// I would try to get frame[animnum][frame].
 	std::vector<ALLEGRO_BITMAP*> frames[ANIM_NUM];
 	std::vector<int> xOff[ANIM_NUM];
 	std::vector<int> yOff[ANIM_NUM];
@@ -99,6 +103,3 @@ private:
 	std::vector<int> boxW[NUM_BOXES][ANIM_NUM]; // Width
 	std::vector<int> boxH[NUM_BOXES][ANIM_NUM]; // Height
 };
-
-
-#endif
