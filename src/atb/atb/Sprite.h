@@ -66,6 +66,9 @@ public:
 	unsigned int numFrames(int num);
 
 private:
+
+	// Split a line into some elements
+	std::vector<std::string> strTokenize(std::string s, char delim);
 	
 	// Accessors for readability
 	ALLEGRO_BITMAP* getFrame();

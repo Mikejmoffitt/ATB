@@ -1,5 +1,37 @@
 #include "Sprite.h"
 
+std::vector<std::string> Sprite::strTokenize(std::string s, char delim)
+{
+	const char EOL = '\n';
+	std::vector<std::string> e;
+	int reserve = 0;
+	for (unsigned int i = 0; i < s.length(); i++)
+	{
+		if (s[i] == delim)
+		{
+			reserve++; // Calculate number of elements to prevent
+			//needless vector resizing
+		}
+	}
+
+	e.reserve(reserve);
+
+	std::string elem;
+	for (unsigned int i = 0; i < s.length(); i++)
+	{
+		if (s[i] == delim || s[i] == EOL)
+		{
+			e.push_back(elem);
+			elem = "";
+		}
+		else
+		{
+			elem.push_back(s[i]);
+		}
+	}
+	return e;
+}
+
 Sprite::Sprite(std::string name)
 {
 	charName = name;
@@ -24,7 +56,6 @@ Sprite::Sprite(std::string name)
 
 		found++;
 	}
-
 }
 
 Sprite::~Sprite()
