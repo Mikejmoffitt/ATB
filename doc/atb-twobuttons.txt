@@ -1,6 +1,5 @@
 == Introduction ==
 
-ATB is a possible working title for this fighting game. We'll see what we use.
 ATB stands for "Attack throw block". These are the three basic actions a player
 can do in a match that gives a traditional fighting game its rock-paper-scissors
 nature. This is a game founded on the fundamentals found at the heart of all
