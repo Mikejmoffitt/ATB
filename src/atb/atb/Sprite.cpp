@@ -84,19 +84,35 @@ Sprite::Sprite(std::string name)
 
 			// Load various things coordinated with the number of frames
 			animLength[index] = frameTokens.size();
+
+			// Reserve vector slots so each frame doesn't reallocate for the vector 
+			frames[index].reserve(animLength[index]);
+			xOff[index].reserve(animLength[index]);
+			yOff[index].reserve(animLength[index]);
+			length[index].reserve(animLength[index]);
+
+			for (int i = 0; i < 5; i++)
+			{
+				boxX[i][index].reserve(animLength[index]);
+				boxY[i][index].reserve(animLength[index]);
+				boxW[i][index].reserve(animLength[index]);
+				boxH[i][index].reserve(animLength[index]);
+			}
+
 			for (unsigned int i = 0; i < animLength[index]; i++)
 			{
 				// Frame bitmaps
 				ss.str("");
+				
+				// Tack on the image name to the path
 				ss << filePath << frameTokens[i];
 
-
 				frames[index].push_back(al_load_bitmap(ss.str().c_str()));
-				
 				xOff[index].push_back(xOffTokens[i]);
 				yOff[index].push_back(yOffTokens[i]);
 				length[index].push_back(lenTokens[i]);
 
+				// Push these big nasties back!
 				boxX[0][index].push_back(box0xTokens[i]);
 				boxY[0][index].push_back(box0yTokens[i]);
 				boxW[0][index].push_back(box0wTokens[i]);
