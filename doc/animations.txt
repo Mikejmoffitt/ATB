@@ -19,11 +19,19 @@ As it's just an INI file comments can be put like this:
 I highly recommend a comment describing the nature of the animation to make 
 assignments easier later. 
 
+Oh, uh, the frameName line of frames is something like this:
+
+stand0.png,stand1.png,stand2.png,crouch1.png,
+
+please end with an ending comma delimeter. My tokenizing function is not great
+or perfect but we have 48 hours so just work with it. Sorry.
+
+
 [Animation number]
-	loop = int (-1 to stay on final frame)
 	frameName = string[] (filename of the animation frame itself)
-	xoff = int[]
-	yoff = int[]
+	loop = int (-1 to stay on final frame)
+	xOff = int[]
+	yOff = int[]
 	durations = int[]
 	box0x = int[] // Body box
 	box0y = int[]
@@ -44,4 +52,4 @@ assignments easier later.
 	box4x = int[] // Attack box
 	box4y = int[]
 	box4w = int[]
-	box4h = int[]?
+	box4h = int[]

@@ -11,16 +11,17 @@ instructed to be blitted somewhere on screen.
 
 #include <vector>
 #include <string>
+#include <iostream>
 #include <sstream>
 #include "allegro5\allegro5.h"
-#include "allegro5\allegro_image.h"
 #include "allegro5\allegro_primitives.h"
+#include "allegro5\allegro_image.h"
 
 #define ANIM_NUM 160
 #define ANIM_LENGTH 64
 #define NUM_BOXES 5
 
-#define CHAR_DIR "data/char/"
+#define CHAR_DIR "./data/char/"
 #define ANIM_DIR "/anim/"
 #define ANIM_FORMAT ".png"
 
@@ -33,7 +34,6 @@ instructed to be blitted somewhere on screen.
 class Sprite
 {
 public:
-
 	std::string charName;
 	Sprite(std::string name);
 	~Sprite();
@@ -57,35 +57,36 @@ public:
 	void forceAnimation(int num);
 
 	// Resets whichever animation is playing to given frame (default 0)
-	void resetAnimation(int frame = 0);
+	void resetAnimation(int frame);
 
 	// Gets the length in frames of an animation
 	unsigned int animationLength(int num);
 
 	// Get number of frames of an animation (not duration!)
 	unsigned int numFrames(int num);
+	// Accessors for readability
+	ALLEGRO_BITMAP* getFrame();
 
 private:
 
 	// Split a line into some elements
 	std::vector<std::string> strTokenize(std::string s, char delim);
+	std::vector<int> strToki(std::string s, char delim);
 	
-	// Accessors for readability
-	ALLEGRO_BITMAP* getFrame();
 
 	// Which animation slots are actually used
-	int numAnimations;
+	unsigned int numAnimations;
 
 	// Animation state variables
-	int animNum; // Which animation is being played
-	int frameNum; // Incremented when frameCnt > length[anim][frame]
-	int frameCnt; // Incremented every tick
+	unsigned int animNum; // Which animation is being played
+	unsigned int frameNum; // Incremented when frameCnt > length[anim][frame]
+	unsigned int frameCnt; // Incremented every tick
 
 	// Each animation property is accessde by array index for the given anim
 	// For example to check whether animation 6 loops I would look at 
 	// loop[6]
 	int loop[ANIM_NUM];
-	int animLength[ANIM_NUM];
+	unsigned int animLength[ANIM_NUM];
 
 	// THESE ARE ARRAYS OF VECTORS. NOT THE OTHER WAY AROUND.
 
@@ -95,7 +96,7 @@ private:
 	std::vector<ALLEGRO_BITMAP*> frames[ANIM_NUM];
 	std::vector<int> xOff[ANIM_NUM];
 	std::vector<int> yOff[ANIM_NUM];
-	std::vector<int> length[ANIM_NUM];
+	std::vector<unsigned int> length[ANIM_NUM];
 
 	// Hitboxes are tricky - we'll have accessors and setters for these - but
 	// the format will be [box num][anim number][frame] where the last one is a
