@@ -182,6 +182,8 @@ like this, nice and human-readable.
 	projectile = bool         // Whether this attack will fire a projectile
 	projectileDelay = int     // How long until the projectile comes out
 	projectileAnim = int      // Projectile animation sequence
+	projectileX = int         // projectile X relative to player top-left corner
+	projectileY = int         // projectile Y relative to player top-left corner
 	projectileVecX = double   // X vector for projectile
 	projectileVecY = double   // same for Y
 	projectileDVecX = double  // change in x vector component per frame

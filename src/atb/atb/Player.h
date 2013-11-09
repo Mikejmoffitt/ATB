@@ -12,7 +12,7 @@
 #include "Sprite.h"
 #include "Barge.h"
 
-#define GROUND_POS 200
+#define GROUNDPOS 200
 #define MIN_X 640+72
 #define MAX_X 320-72
 
@@ -46,6 +46,7 @@ public:
 	ALLEGRO_CONFIG* animCfg;
 
 	Player(std::string playerName, bool isP2);
+	~Player();
 
 	std::string name;
 	std::string displayName;
@@ -66,6 +67,9 @@ public:
 	// Check for charge inputs
 	void checkCharge();
 
+	// Run the attack vector processor for movements
+	void attackVectors();
+
 	// Detected valid input buffers when > 0
 	int qcf;
 	int qcb;
@@ -80,6 +84,7 @@ public:
 private:
 
 	
+
 	std::vector<std::string> strTokenize(std::string s, char delim);
 	std::vector<int> strToki(std::string s, char delim);
 	std::vector<double> strTokd(std::string s, char delim);
@@ -142,7 +147,9 @@ private:
 	double a_projectileDVecX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
 	double a_projectileDVecY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
 	int    a_projectileLife[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
-	int    a_projectileHitSnd[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];	
+	int    a_projectileHitSnd[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int    a_projectileX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int    a_projectileY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];	
 
 	// Animation indexes for standard anims
 	int stdAnimIndexes[NUM_STD_ANIMS];

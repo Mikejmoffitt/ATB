@@ -106,6 +106,7 @@ std::vector<double> Player::strTokd(std::string s, char delim)
 
 Player::Player(std::string playerName, bool isP2)
 {
+
 	name = playerName;
 	sprite = new Sprite(name);
 	isPlayer2 = isP2;
@@ -199,17 +200,13 @@ Player::Player(std::string playerName, bool isP2)
 
 				ss << inputVar << buttonVar << locusVar;
 
-				std::cout << "Loading " << ss.str() << " for " << name << std::endl;
-
 				if (al_get_config_value(metaCfg,ss.str().c_str(),"enabled") != NULL)
 				{
-					std::cout << "This one exists... ";
 					a_enabled[l_input][l_button][l_locus] = atoi(
 						al_get_config_value(metaCfg,ss.str().c_str(),"enabled"));
 
 					if (a_enabled[l_input][l_button][l_locus])
 					{
-						std::cout << "it is enabled. " << std::endl;
 						a_whiffSnd[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"whiffSnd"));
 						a_hitSnd[l_input][l_button][l_locus] = atoi(
@@ -259,26 +256,26 @@ Player::Player(std::string playerName, bool isP2)
 				
 						std::vector<double> dstuff = strTokd(
 							al_get_config_value(metaCfg,ss.str().c_str(),"vecX"),',');
-						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						for (unsigned int i = 0; i < dstuff.size(); i++)
 						{
 							a_vecX[l_input][l_button][l_locus].push_back(dstuff[i]);
 						}
 						dstuff = strTokd(
 							al_get_config_value(metaCfg,ss.str().c_str(),"vecY"),',');
 
-						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						for (unsigned int i = 0; i < dstuff.size(); i++)
 						{
 							//a_vecY[l_input][l_button][l_locus].push_back(dstuff[i]);
 						}
 						dstuff = strTokd(
 							al_get_config_value(metaCfg,ss.str().c_str(),"dVecX"),',');
-						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						for (unsigned int i = 0; i < dstuff.size(); i++)
 						{
 							//a_dVecX[l_input][l_button][l_locus].push_back(dstuff[i]);
 						}
 						dstuff = strTokd(
 							al_get_config_value(metaCfg,ss.str().c_str(),"dVecY"),',');
-						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						for (unsigned int i = 0; i < dstuff.size(); i++)
 						{
 							//a_dVecY[l_input][l_button][l_locus].push_back(dstuff[i]);
 						}
@@ -304,6 +301,10 @@ Player::Player(std::string playerName, bool isP2)
 									al_get_config_value(metaCfg,ss.str().c_str(),"projectileLife"));
 								a_projectileHitSnd[l_input][l_button][l_locus] = atoi(
 									al_get_config_value(metaCfg,ss.str().c_str(),"projectileHitSnd"));
+								a_projectileX[l_input][l_button][l_locus] = atoi(
+									al_get_config_value(metaCfg,ss.str().c_str(),"projectileX"));
+								a_projectileY[l_input][l_button][l_locus] = atoi(
+									al_get_config_value(metaCfg,ss.str().c_str(),"projectileY"));
 							}
 						}
 					}
@@ -319,7 +320,6 @@ Player::Player(std::string playerName, bool isP2)
 	}
 	std::cout << "Done loading INI info." << std::endl;
 
-
 	// Clear out state variables
 	qcf = 0;
 	qcb = 0;
@@ -327,4 +327,28 @@ Player::Player(std::string playerName, bool isP2)
 	bdp = 0;
 	fcharge = 0;
 	bcharge = 0;
+	hitfreeze = 0;
+	direction = isPlayer2?true:false;
+	crouching = false;
+	grounded = true;
+	yPos = GROUNDPOS;
+	xPos = isPlayer2?(320 + (192/2)):(320 - (192/2));
+	vecX = 0;
+	vecY = 0;
+	slideX = 0;
+
+	doingNormal = 0;
+	jumpDelay = 0;
+	landDelay = 0;
+	landBlockCancel = false;
+	hitStun = 0;
+	blockStun = 0;
+	standDelay = 0;
+	knockDown = false;
 }
+
+Player::~Player()
+{
+	delete sprite;
+}
+
