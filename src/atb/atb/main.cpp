@@ -34,9 +34,11 @@ int main(int argc, char **argv)
 		example2->animate();
 
 		// Just shows the animation script does play properly...
-		al_draw_tinted_bitmap(example2->getFrame(),al_map_rgb(128,255,255),-192 + (timer*2)%(320+192),32,0);
+		
+		al_draw_bitmap(example2->getFrame(),320 - (timer*2)%(320+192),48,ALLEGRO_FLIP_HORIZONTAL);
 		al_draw_bitmap(example->getFrame(),64,48,0);
-		al_draw_bitmap(example2->getFrame(),320 - (timer*2)%(320+192),64,ALLEGRO_FLIP_HORIZONTAL);
+		al_draw_tinted_bitmap(example2->getFrame(),al_map_rgb(128,255,255),-192 + (timer*2)%(320+192),48,0);
+		
 
 		al_set_target_backbuffer(display);
 		al_draw_scaled_bitmap(mainBuffer,
