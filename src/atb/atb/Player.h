@@ -16,9 +16,12 @@
 #define MIN_X 640+72
 #define MAX_X 320-72
 
+#define PLAYERWIDTH 192
+#define PLAYERHEIGHT 128
+
 #define STANDANIM 0
 #define CROUCHANIM 1
-#define FORDWARDANIM 2
+#define FORWARDANIM 2
 #define BACKANIM 3
 #define JUMPANIM 4
 #define JUMPFWDANIM 5
@@ -32,8 +35,11 @@
 #define BLOCKANIM 13
 #define BLOCKLOWANIM 14
 #define REELANIM 15
+#define PREJUMPANIM 16
 
-#define NUM_STD_ANIMS 16
+#define DIR_INFLUENCE 0.05
+
+#define NUM_STD_ANIMS 17
 
 class Player
 {
@@ -55,8 +61,11 @@ public:
 	// player's vuln boxes (1-3)
 	void getHit();
 
-	// Move the player left / right
+	// inputs for player left / right, or start an attack animation
 	void handleInputs();
+
+	// Move the player around
+	void doPhysics();
 
 	// Whether or not to pause the action (and decrease hitfreeze)
 	bool freezeGame();
@@ -69,6 +78,18 @@ public:
 
 	// Run the attack vector processor for movements
 	void attackVectors();
+
+	// Pushes player back if out of bounds or touching the other player
+	void boundsPush();
+
+	// Runs animation sequence (if freeze is 0)
+	void animate();
+
+	// Renders the player on screen based on coordinates
+	void blit(int scrollX);
+
+	// Checks if hitbox a is colliding with enemy hitbox b
+	bool checkBox(int a, int b);
 
 	// Detected valid input buffers when > 0
 	int qcf;
@@ -161,6 +182,7 @@ private:
 	double backSpeed;
 	double fwdJumpSpeed;
 	double backJumpSpeed;
+	double gravityStd;
 	double gravity;
 	double jumpStrength;
 	int jumpDelayMax;

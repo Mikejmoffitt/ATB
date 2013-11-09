@@ -1,15 +1,6 @@
 #include "Player.h"
 
-bool Player::freezeGame()
-{
-	hitfreeze--;
-	return (hitfreeze>0);
-}
 
-void Player::loadSpriteBarge()
-{
-	sprite->barge = barge;
-}
 std::vector<std::string> Player::strTokenize(std::string s, char delim)
 {
 	const char EOL = '\n';
@@ -116,10 +107,11 @@ Player::Player(std::string playerName, bool isP2)
 	
 	metaCfg = al_load_config_file(ss.str().c_str());
 
-	// Load basic animation cues
+	// Load meta information
 	displayName = al_get_config_value(metaCfg,"playerMeta","displayName");
 	health = atoi(al_get_config_value(metaCfg,"playerMeta","health"));
 	gravity = atof(al_get_config_value(metaCfg,"playerMeta","gravity"));
+	gravityStd = atof(al_get_config_value(metaCfg,"playerMeta","gravity"));
 	fwdSpeed = atof(al_get_config_value(metaCfg,"playerMeta","fwdSpeed"));
 	backSpeed = atof(al_get_config_value(metaCfg,"playerMeta","backSpeed"));
 	fwdJumpSpeed = atof(al_get_config_value(metaCfg,"playerMeta","fwdJumpSpeed"));
@@ -127,6 +119,25 @@ Player::Player(std::string playerName, bool isP2)
 	jumpStrength = atof(al_get_config_value(metaCfg,"playerMeta","jumpStrength"));
 	jumpDelayMax = atof(al_get_config_value(metaCfg,"playerMeta","jumpDelay"));
 	landDelayMax = atof(al_get_config_value(metaCfg,"playerMeta","landDelay"));
+
+	// Standard animation indexes
+	stdAnimIndexes[STANDANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","standAnim"));
+	stdAnimIndexes[CROUCHANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","crouchAnim"));
+	stdAnimIndexes[FORWARDANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","forwardAnim"));
+	stdAnimIndexes[BACKANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","backAnim"));
+	stdAnimIndexes[JUMPANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","jumpAnim"));
+	stdAnimIndexes[JUMPFWDANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","jumpFwdAnim"));
+	stdAnimIndexes[JUMPBACKANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","jumpBackAnim"));
+	stdAnimIndexes[THROWANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","throwAnim"));
+	stdAnimIndexes[GRABANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","grabAnim"));
+	stdAnimIndexes[DOWNANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","downAnim"));
+	stdAnimIndexes[GETUPANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","getUpAnim"));
+	stdAnimIndexes[WINANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","winAnim"));
+	stdAnimIndexes[LOSEANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","loseAnim"));
+	stdAnimIndexes[BLOCKANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","blockAnim"));
+	stdAnimIndexes[BLOCKLOWANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","blockLowAnim"));
+	stdAnimIndexes[REELANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","reelAnim"));
+	stdAnimIndexes[PREJUMPANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","preJumpAnim"));
 
 	std::string inputVar = "n";
 	std::string buttonVar = "p";
@@ -328,7 +339,7 @@ Player::Player(std::string playerName, bool isP2)
 	fcharge = 0;
 	bcharge = 0;
 	hitfreeze = 0;
-	direction = isPlayer2?true:false;
+	direction = isPlayer2?false:true;
 	crouching = false;
 	grounded = true;
 	yPos = GROUNDPOS;
@@ -338,6 +349,7 @@ Player::Player(std::string playerName, bool isP2)
 	slideX = 0;
 
 	doingNormal = 0;
+	doingSpecial = 0;
 	jumpDelay = 0;
 	landDelay = 0;
 	landBlockCancel = false;
@@ -352,3 +364,169 @@ Player::~Player()
 	delete sprite;
 }
 
+void Player::getHit()
+{
+
+}
+
+void Player::handleInputs()
+{
+	// Check for walking around inputs (not attack buttons)
+	bool inputOk = true;
+	
+	typedef int Keys[10];
+	Keys* inputs = isPlayer2? &(barge->p2keys) : &(barge->p1keys);
+	if (hitStun > 0 || blockStun > 0)
+	{
+		std::cout << "No input from hitStun or blockStun!" << std::endl;
+		inputOk = false;
+	}
+	else if (!grounded)
+	{
+		std::cout << "No input from !grounded!" << std::endl;
+		inputOk = false;
+	}
+	else if (doingNormal > 0 || doingSpecial > 0)
+	{
+		std::cout << "No input from doing a move!" << std::endl;
+		inputOk = false;
+	}
+	if (grounded)
+	{
+		if (jumpDelay > 0)
+		{
+			sprite->playAnimation(stdAnimIndexes[PREJUMPANIM]);
+			inputOk = false;
+			jumpDelay--;
+			vecX = 0;
+			vecY = 0;
+		}
+
+		if (landDelay > 0)
+		{
+			sprite->playAnimation(stdAnimIndexes[PREJUMPANIM]);
+			inputOk = false;
+			landDelay--;
+			vecX = 0;
+			vecY = 0;
+		}
+	}
+
+	if (inputOk && !crouching)
+	{
+		// walking left and right
+		if ((*inputs)[LEFTKEY] > 0)
+		{
+			sprite->playAnimation(
+				direction?stdAnimIndexes[BACKANIM]:stdAnimIndexes[FORWARDANIM]);
+			vecX = direction?(backSpeed * -1):(fwdSpeed * -1);
+		}
+		else if ((*inputs)[RIGHTKEY] > 0)
+		{
+			sprite->playAnimation(
+				direction?stdAnimIndexes[FORWARDANIM]:stdAnimIndexes[BACKANIM]);
+			vecX = direction?(backSpeed):(fwdSpeed);
+		}
+		else
+		{
+			vecX = 0;
+			sprite->playAnimation(stdAnimIndexes[STANDANIM]);
+		}
+		if ((*inputs)[DOWNKEY] > 0)
+		{
+			sprite->playAnimation(stdAnimIndexes[CROUCHANIM]);
+			crouching = true;
+			vecX = 0;
+		}
+		// Handling jumps
+		if ((*inputs)[UPKEY] > 0)
+		{
+			jumpDelay = jumpDelayMax;
+		}
+	}
+	if (inputOk && crouching)
+	{
+		if ((*inputs)[DOWNKEY] == 0)
+		{
+			crouching = false;
+		}
+	}
+
+	// More jump processing
+	if (jumpDelay == 1)
+	{
+		jumpDelay = 0;
+		grounded = false;
+		yPos = GROUNDPOS-1;
+		
+		vecY = jumpStrength * -1;
+		if ((*inputs)[LEFTKEY] > 0)
+		{
+			vecX = direction?(backJumpSpeed * -1):(fwdJumpSpeed * -1);
+		}
+		else if ((*inputs)[RIGHTKEY] > 0)
+		{
+			vecX = direction?(fwdJumpSpeed):(backJumpSpeed);
+		}
+		else
+		{
+			vecX = 0;
+		}
+		landDelay = landDelayMax;
+	}
+}
+
+void Player::doPhysics()
+{
+	std::cout << vecY << std::endl;
+	grounded = (yPos >= GROUNDPOS);
+
+	xPos = xPos + vecX;
+	yPos = yPos + vecY;
+	if (!grounded)
+	{
+		vecY = vecY + gravity;
+	}
+}
+
+bool Player::freezeGame()
+{
+	bool retval = hitfreeze > 0;
+	hitfreeze--;
+	return (retval);
+}
+
+void Player::checkCommands()
+{
+
+}
+
+void Player::attackVectors()
+{
+
+}
+
+void Player::loadSpriteBarge()
+{
+	sprite->barge = barge;
+}
+
+void Player::boundsPush()
+{
+
+}
+
+void Player::animate()
+{
+	sprite->animate();
+}
+
+void Player::blit(int scrollX)
+{
+	sprite->blit(floor(xPos) - (PLAYERWIDTH/2) - scrollX,yPos-(PLAYERHEIGHT),!direction,isPlayer2);
+}
+
+bool Player::checkBox(int a, int b)
+{
+	return false;
+}
