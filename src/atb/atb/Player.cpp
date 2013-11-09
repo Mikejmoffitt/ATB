@@ -546,17 +546,19 @@ void Player::loadSpriteBarge()
 {
 	sprite->barge = barge;
 }
+#define MAXTRIES 16
 
 void Player::boundsPush()
 {
 	int tries = 0;
-	while (checkBox(0,0) && tries < 16)
+	while (checkBox(0,0) && tries < MAXTRIES)
 	{
 		if (xPos < other->xPos)
 		{
-			if (yPos < other->yPos)
+			if (!grounded && other->grounded)
 			{
-				xPos--;
+				xPos = xPos - (0.5 * vecX) + (0.5 * other->vecX);
+				tries = MAXTRIES;
 			}
 			else
 			{
@@ -573,9 +575,10 @@ void Player::boundsPush()
 		}
 		if (xPos >= other->xPos)
 		{
-			if (yPos < other->yPos)
+			if (!grounded && other->grounded)
 			{
-				xPos++;
+				xPos = xPos - (0.5 * vecX) + (0.5 * other->vecX);
+				tries = MAXTRIES;
 			}
 			else
 			{
