@@ -18,20 +18,8 @@ instructed to be blitted somewhere on screen.
 #include "allegro5\allegro_image.h"
 
 #include "Barge.h"
-
-#define ANIM_NUM 160
-#define ANIM_LENGTH 64
-#define NUM_BOXES 5
-
-#define CHAR_DIR "./data/char/"
-#define ANIM_DIR "/anim/"
-#define ANIM_FORMAT ".png"
-
-#define BOX_BODY 0
-#define BOX_VULN0 1
-#define BOX_VULN1 2
-#define BOX_VULN2 3
-#define BOX_ATTACK 4
+#include "dirDefs.h"
+#include "spriteDefs.h"
 
 class Sprite
 {

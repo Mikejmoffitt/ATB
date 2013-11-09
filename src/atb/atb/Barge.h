@@ -15,19 +15,7 @@ The barge class handles inputs and has a wrapper draw function.
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
-
-#define UPKEY 0
-#define DOWNKEY 1
-#define LEFTKEY 2
-#define RIGHTKEY 3
-#define LPKEY 4
-#define HPKEY 5
-#define LKKEY 6
-#define HKKEY 7
-#define STARTKEY 8
-#define SELKEY 9
-
-#define PLAYER_NUMBER_OF_KEYS 10
+#include "bargeDefs.h"
 
 class Barge
 {

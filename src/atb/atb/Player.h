@@ -8,6 +8,7 @@
 #include "allegro5\allegro_primitives.h"
 #include "allegro5\allegro_image.h"
 
+#include "dirDefs.h"
 #include "Sprite.h"
 #include "Barge.h"
 
@@ -19,10 +20,16 @@ class Player
 {
 public:
 	Sprite* sprite;
-	Barge* sprite;
+	Barge* barge;
 	Player* other;
 
+	ALLEGRO_CONFIG* metaCfg;
+	ALLEGRO_CONFIG* animCfg;
+
+	Player(std::string playerName, bool isP2);
+
 	std::string name;
+	std::string displayName;
 	
 	// Check if other has the attacking hitbox (4) overlapping our 
 	// player's vuln boxes (1-3)
@@ -48,6 +55,8 @@ public:
 	int fcharge;
 	int bcharge;
 
+	// Load properties 
+
 private:
 
 	bool isPlayer2;
@@ -58,6 +67,9 @@ private:
 	double fwdJumpSpeed;
 	double backJumpSpeed;
 	double gravity;
+	double jumpStrength;
+	int jumpDelayMax;
+	int landDelayMax;
 
 	// Game state variables
 	int health;
