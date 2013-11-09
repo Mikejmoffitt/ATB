@@ -33,9 +33,13 @@ int main(int argc, char **argv)
 	ALLEGRO_DISPLAY* display = al_create_display(windowX,windowY);
 
 	ALLEGRO_BITMAP* mainBuffer = al_create_bitmap(baseX,baseY);
-	
+
 	al_init_primitives_addon();
 	al_init_image_addon();
+	
+	std::stringstream sb;
+	sb << STAGE_DIR << "characterselect" << ANIM_FORMAT;
+	ALLEGRO_BITMAP* background = al_load_bitmap(sb.str().c_str());
 
 	Player* example = new Player("chunex",false);
 
@@ -48,8 +52,8 @@ int main(int argc, char **argv)
 	{
 		barge->poll();
 		al_set_target_bitmap(mainBuffer);
-		al_clear_to_color(al_map_rgb(255 - timer,(timer * 2) % 255,timer%255));
-
+		//al_clear_to_color(al_map_rgb(255 - timer,(timer * 2) % 255,timer%255));
+		barge->draw(background, 0,0,false,false);
 		// Just shows the animation script does play properly...
 
 		al_set_target_backbuffer(display);
@@ -64,5 +68,6 @@ int main(int argc, char **argv)
 	delete(barge);
 	al_destroy_bitmap(mainBuffer);
 	al_destroy_display(display);
+	al_destroy_bitmap(background);
 	al_uninstall_system();
 }
