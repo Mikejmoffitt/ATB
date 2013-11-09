@@ -482,7 +482,7 @@ void Barge::setDefaultConfig()
 	intStringer << KB_LP1;
 	al_set_config_value(gameCfg,"keyboard","lp1",intStringer.str().c_str());
 	intStringer.str("");
-	intStringer << KB_HP2;
+	intStringer << KB_HP1;
 	al_set_config_value(gameCfg,"keyboard","hp1",intStringer.str().c_str());
 	intStringer.str("");
 	intStringer << KB_LK1;

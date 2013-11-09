@@ -16,6 +16,11 @@
 #define MIN_X 640+72
 #define MAX_X 320-72
 
+#define BOUNDS 16
+
+#define STAGEWIDTH 640
+#define SCREENWIDTH 320
+
 #define PLAYERWIDTH 192
 #define PLAYERHEIGHT 128
 
@@ -101,6 +106,9 @@ public:
 
 	void loadSpriteBarge();
 	// Load properties 
+
+	double xPos;
+	double yPos;
 
 private:
 
@@ -196,8 +204,6 @@ private:
 	bool direction; // Right == true
 	bool crouching;
 	bool grounded;
-	double xPos;
-	double yPos;
 	double slideX; // Sliding from doing an attack on the ground
 	double vecX;
 	double vecY;

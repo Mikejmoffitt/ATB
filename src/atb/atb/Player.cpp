@@ -494,7 +494,6 @@ void Player::handleInputs()
 
 void Player::doPhysics()
 {
-	std::cout << vecY << std::endl;
 	grounded = (yPos >= GROUNDPOS);
 	if (grounded)
 	{
@@ -510,6 +509,8 @@ void Player::doPhysics()
 	{
 		vecY = vecY + gravity;
 	}
+
+	boundsPush();
 }
 
 bool Player::freezeGame()
@@ -536,7 +537,22 @@ void Player::loadSpriteBarge()
 
 void Player::boundsPush()
 {
-
+	if (xPos < BOUNDS)
+	{
+		xPos = BOUNDS;
+	}
+	if (xPos > 640-BOUNDS)
+	{
+		xPos = 640-BOUNDS;
+	}
+	if (other != NULL)
+	{
+		while (floor(xPos - other->xPos) > SCREENWIDTH-(BOUNDS*2))
+		{
+			xPos--;
+			other->xPos++;
+		}
+	}
 }
 
 void Player::animate()

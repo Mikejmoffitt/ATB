@@ -69,6 +69,8 @@ int main(int argc, char **argv)
 		//Needs to be handled by actual character select eventually
 		Player1 = new Player("chunex",false); //Pretend Players selected a character
 		Player2 = new Player("chunex",true);
+		Player1->other = Player2;
+		Player2->other = Player1;
 		Player1->barge = barge;
 		Player2->barge = barge;
 	}
@@ -81,20 +83,31 @@ int main(int argc, char **argv)
 	sample = al_load_sample("data/testmus.ogg");
 	al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_LOOP,0);
 	//Game Start loop
+	int scroll = 0;
 	while(rounds1 < numRounds && rounds2 < numRounds)
 	{
 		barge->poll();
 		al_set_target_bitmap(mainBuffer);
-		barge->draw(background, 0,0,false,false);
+		barge->draw(background, scroll * -1,0,false,false);
+		scroll = (Player1->xPos + Player2->xPos)/2 - (SCREENWIDTH/2);
+		if (scroll < 0)
+		{
+			scroll = 0;
+		}
+		if (scroll > 320)
+		{
+			scroll = 320;
+		}
 
 		Player1->handleInputs();
 		Player1->doPhysics();
 		Player1->animate();
-		Player1->blit(0);
+		Player1->blit(scroll);
 		Player2->handleInputs();
 		Player2->doPhysics();
 		Player2->animate();
-		Player2->blit(0);
+		Player2->blit(scroll);
+
 		
 		al_set_target_backbuffer(display);
 		al_draw_scaled_bitmap(mainBuffer,
