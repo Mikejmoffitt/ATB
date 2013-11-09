@@ -1,5 +1,10 @@
 #include "Sprite.h"
 
+void Sprite::blit(int x, int y, bool flip, bool tint)
+{
+	barge->draw(getFrame(),
+		x + xOff[animNum][frameNum],y+yOff[animNum][frameNum],flip,tint);
+}
 
 Sprite::Sprite(std::string name)
 {

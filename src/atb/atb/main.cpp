@@ -25,9 +25,14 @@ int main(int argc, char **argv)
 	
 	Sprite* example = new Sprite("example");
 	Sprite* example2 = new Sprite("chunex");
+
+	Barge* barge = new Barge("c:/atb.ini");
+	example->barge = barge;
+	example2->barge = barge;
 	int timer = 0;
 	while (timer < 1800)
 	{
+		barge->poll();
 		al_set_target_bitmap(mainBuffer);
 		al_clear_to_color(al_map_rgb(255 - timer,(timer * 2) % 255,timer%255));
 		example->animate();
@@ -35,10 +40,7 @@ int main(int argc, char **argv)
 
 		// Just shows the animation script does play properly...
 		
-		al_draw_bitmap(example2->getFrame(),320 - (timer*2)%(320+192),48,ALLEGRO_FLIP_HORIZONTAL);
-		al_draw_bitmap(example->getFrame(),64,48,0);
-		al_draw_tinted_bitmap(example2->getFrame(),al_map_rgb(128,255,255),-192 + (timer*2)%(320+192),48,0);
-		
+		example->blit(32 - 0,48,1,0);
 
 		al_set_target_backbuffer(display);
 		al_draw_scaled_bitmap(mainBuffer,
@@ -48,6 +50,7 @@ int main(int argc, char **argv)
 	}
 	delete(example);
 	delete(example2);
+	delete(barge);
 	al_destroy_bitmap(mainBuffer);
 	al_destroy_display(display);
 	al_uninstall_system();

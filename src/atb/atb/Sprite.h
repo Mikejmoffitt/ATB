@@ -17,6 +17,8 @@ instructed to be blitted somewhere on screen.
 #include "allegro5\allegro_primitives.h"
 #include "allegro5\allegro_image.h"
 
+#include "Barge.h"
+
 #define ANIM_NUM 160
 #define ANIM_LENGTH 64
 #define NUM_BOXES 5
@@ -34,12 +36,16 @@ instructed to be blitted somewhere on screen.
 class Sprite
 {
 public:
+
+	// Responsible for drawing and handling inputs (in this case, just drawing)
+	Barge* barge;
+
 	std::string charName;
 	Sprite(std::string name);
 	~Sprite();
 
 	// Blits current appropriate frame
-	void blit(int x, int y);
+	void blit(int x, int y, bool flip, bool tint);
 
 	// Like above, but renders hitboxes
 	void boxBlit(int x, int y, int box);
@@ -67,6 +73,8 @@ public:
 
 	// Accessors for readability
 	ALLEGRO_BITMAP* getFrame();
+
+	// renders the sprite using the barge's drawing function
 
 	// Check box collision
 	// Pointer to other sprite, which local box, which box from the other
