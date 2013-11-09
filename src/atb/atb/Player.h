@@ -34,6 +34,20 @@ public:
 	// Whether or not to pause the action (and decrease hitfreeze)
 	bool freezeGame();
 
+	// Check for command inputs
+	void checkCommands();
+
+	// Check for charge inputs
+	void checkCharge();
+
+	// Detected valid input buffers when > 0
+	int qcf;
+	int qcb;
+	int fdp;
+	int bdp;
+	int fcharge;
+	int bcharge;
+
 private:
 
 	bool isPlayer2;
@@ -48,8 +62,9 @@ private:
 	// Game state variables
 	int health;
 
-	// pause all action
-	int hitfreeze;
+	
+	int hitfreeze; // pause all action
+	bool direction; // Right == true
 	bool crouching;
 	bool grounded;
 	double xPos;

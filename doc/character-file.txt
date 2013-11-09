@@ -1,0 +1,205 @@
+== Player data structure ==
+Michael Moffitt Nov 5 2013
+
+Each character has an attacks file. This contains information about the
+character's moves that are all activated by hitting buttons at the right time.
+The file is internally an INI file, and each section describes one attack.
+There are 48 normal attack slots, 48 close normal attack slots, 32 command 
+slots, and 16 charge slots.
+
+This may seem alarming - that's a lot of slots! - however, most will not be
+filed. 
+
+== ATTACK SLOTS ==
+
+As the game is internally a four button game, so for each four buttons consider
+one of the following each:
+
+=NORMALS=
+**Neutral ground
+ -Holding back on ground
+ -Holding forward on ground
+**Neutral in air
+ -Holding back in air
+ -Holding forward in air
+**Neutral moving in air
+ -Holding moving back in air
+ -Holding moving forward in air
+**Neutral crouching
+ -Holding back while crouching
+ -Holding forward while crouching
+
+=CLOSE NORMALS=
+ -Neutral ground
+ -Holding back on ground
+ -Holding forward on ground
+ -Neutral moving in air
+ -Holding moving back in air
+ -Holding moving forward in air
+ -Neutral in air
+ -Holding back in air
+ -Holding forward in air
+ -Neutral crouching
+ -Holding back while crouching
+ -Holding forward while crouching
+
+=COMMANDS=
+ -QCF
+ -QCB
+ -F. DP
+ -B. DP
+
+=CHARGE=
+ -forward charge
+ -up charge
+ 
+== IT'S NOT SO BAD - CASCADING ATTACKS ==
+
+Fortunately, we do not need to fill in even half of these. Many of them exist
+as special versions of another. For example, Ryu in many Street Fighter games
+can do a special overhead hit if the player holds forward and presses medium
+punch. However, Ryu has no such special forward version of a light punch, so
+even if the player holds forward the regular LP comes out. 
+
+From this we can determine that if such a slot is not filled (or rather, has
+its enabled variable set to FALSE) it will simply default to the normal one.
+
+The same goes for "close" versions. Using Chun Li as an example, pressing 
+HK / Roundhouse from a far distance will have her swing her leg in an arc as
+a crude anti-air. However, if Chun is close to her opponent, she will kick
+nearly straight up (which is her launch in the Marvel series typically). 
+
+Like before, if a "close" version is not enabled, it will default to its non-
+close counterpart. Special attacks do not have close versions, by the way.
+
+Finally, air attacks differentiate between whether the player is doing an 
+angled jump or a straight-up neutral one. In other words, if vecX == 0 or not.
+Like the above ones, if there is no special "moving" version of an air attack
+it will default to the normal one.
+
+This means that the attacks that have been marked with an asterisk are the only
+ones that are strictly required by the game engine to be present. In other 
+words, (4 buttons) * (6 attacks). 
+
+...I mean, I guess you could leave all slots disabled, but your character is
+not going to be so useful. 
+
+== ATTACK SECTION NAMES==
+
+As I mentioned above each INI section is named after its attack slot. They can
+go in any order. 
+
+Each section will be named this way:
+
+Normals:
+[dir]-[close-][locus]-[button]
+
+Specials:
+[command]-[button]
+
+Values for each:
+[dir]:
+	n - neutral
+	b - back
+	f - forward
+
+[close-]
+	"close-" - if it is a close move. Otherwise, put nothing.
+	
+[locus]
+	ground - ground
+	air - air
+	crouch - crouch. Did any of this need explaining? 
+
+[button]
+	lp - light punch
+	hp - hard punch
+	lk - light kick
+	hk - hard kick
+	
+[command]
+	qcf - quarter circle forward
+	qcb - quarter circle back
+	fcharge - forward charge
+	upcharge - upwards charge
+	
+Here are some examples:
+[n-ground-lp]
+[f-close-crouch-lk]
+[b-air-hp]
+[qcf-hp]
+[fcharge-hk]
+
+That's not so bad, eh?
+
+== THE DATA FORMAT FOR PLAYER DATA SECTIONS ==
+
+Inside the player config file, we must have the following sections:
+
+[playerMeta]
+	displayName = string
+	health = int
+	gravity = double
+	fwdSpeed = double (pixels per second)
+	backSpeed = double
+	fwdJumpSpeed = double
+	fwdBackSpeed = double
+	jumpStrength = double (pixels per second per second)
+	jumpDelay = int (frames before jump)
+	landDelay = int (frameS after jump)	
+
+[playerAnims] ; This defines animation sequences for non-attacks
+	standAnim = int
+	crouchANim = int
+	
+	
+
+== THE DATA FORMAT FOR ATTACK SECTIONS == 
+
+Here are all the variables each section of the attacks INI has for each slot.
+Fortunately INI uses named keys so the INI sections will look basically exactly
+like this, nice and human-readable.
+
+[AttackName]
+
+	// Regular meta stuff - sounds, animation number, damage, stun, etc
+	enabled = bool            // Whether this attack is enabled
+	whiffSnd = int            // Sound index to play on animation start
+	hitSnd = int              // Sound index to play when attack lands
+	animNum = int             // Animation sequence number to play
+	damage = int              // Amount of damage done on hit
+	chipDamage = int          // Amount of chip damage done (special only!)
+	knockdown = bool          // Whether this attack will knock down
+	freeze = int              // # Frames to pause the action for impact effect
+	hitStun = int             // # Frames of hitstun for victim when hit
+	normalCancel = bool       // Whether to allow linking into another normal
+	                          // after a hit has landed
+	hitType = int             // 0 - high, 1 - medium, 2 - low
+	
+	// Movement stuff - this is tricky!
+	vecStepDelay = int[]      // How long to delay step[index] from triggering
+	                          // 0 instant, >0 n frame delay, -1 never progress
+	relativeVecX = bool[]     // Whether step[index] adds to vector or sets
+	relativeVecY = bool[]     // it in an absolute way.
+	vecX = double[]           // x vector component for step[index]
+	vecY = double[]           // same for Y
+	dVecX = double[]          // change in x vector component for step[index]
+	dVecY = double[]          // same for Y
+	                          
+	knockBackVecX = double    // knockback x vector for hit victim
+	kockBackVecY = double     // knockback y vector for hit victim in air
+                              // or for if a knockdown has been triggered which
+							  // will briefly put the victim airborn before
+							  // landing again
+	                          
+	// Projectile Properties  
+	projectile = bool         // Whether this attack will fire a projectile
+	projectileDelay = int     // How long until the projectile comes out
+	projectileAnim = int      // Projectile animation sequence
+	projectileVecX = double   // X vector for projectile
+	projectileVecY = double   // same for Y
+	projectileDVecX = double  // change in x vector component per frame
+	projectileDVecY = double  // same for Y
+	projectileLife = int      // decay time for projectile (0 for infinite)
+	projectileHitSnd = int    // Sound index to play on hit
+	
