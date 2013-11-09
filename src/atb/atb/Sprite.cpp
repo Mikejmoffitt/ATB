@@ -297,7 +297,32 @@ std::vector<int> Sprite::strToki(std::string s, char delim)
 	return e;
 }
 
-bool Sprite::boxCol(Sprite* other, int myBox, int otherBox)
-{
+//bool Sprite::boxCol(Sprite* other, int myBox, int otherBox)
+//{
+//	int x1 = getBoxX(myBox);
+//	int y1 = getBoxY(myBox);
+//	int w1 = getBoxW(myBox);
+//	int h1 = getBoxH(myBox);
+//	int x2 = other->getBoxX(otherBox);
+//	int y2 = other->getBoxY(otherBox);
+//	int w2 = other->getBoxW(otherBox);
+//	int h2 = other->getBoxH(otherBox);
+//	return !(x2 < (x1 + w1) || x1 > (x2 + w2) || y2 < (y1 + h1) || y1 > (y2 + h2) );
+//}
 
+int Sprite::getBoxX(int box)
+{
+	return boxX[box][animNum][frameNum];
+}
+int Sprite::getBoxY(int box)
+{
+	return boxY[box][animNum][frameNum];
+}
+int Sprite::getBoxW(int box)
+{
+	return boxW[box][animNum][frameNum];
+}
+int Sprite::getBoxH(int box)
+{
+	return boxH[box][animNum][frameNum];
 }

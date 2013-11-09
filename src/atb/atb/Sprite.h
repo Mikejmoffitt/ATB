@@ -73,8 +73,13 @@ public:
 
 	// Basically, check if this sprite's box #(myBox) is overlapping the other
 	// sprite's #(otherBox).
-	bool boxCol(Sprite* other, int myBox, int otherBox);
+//	bool boxCol(Sprite* other, int myBox, int otherBox);
 
+	// Accessors for hit box 
+	int getBoxX(int box);
+	int getBoxY(int box);
+	int getBoxW(int box);
+	int getBoxH(int box);
 
 private:
 
