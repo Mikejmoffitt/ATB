@@ -44,7 +44,7 @@
 #define LENIENCY 2
 
 
-#define DIR_INFLUENCE 0.05
+#define DIR_INFLUENCE 0.55
 
 #define NUM_STD_ANIMS 17
 

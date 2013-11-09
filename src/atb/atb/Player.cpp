@@ -421,6 +421,29 @@ void Player::handleInputs()
 			}
 		}
 	}
+	else
+	{
+		if( !grounded && blockStun == 0 && hitStun == 0)
+		{
+			if((*inputs)[LEFTKEY] > 0)
+			{
+				xPos += DIR_INFLUENCE * -1;
+			}
+			if((*inputs)[RIGHTKEY] > 0)
+			{
+				xPos += DIR_INFLUENCE;
+			}
+			if((*inputs)[UPKEY] > 0)
+			{
+				yPos -= DIR_INFLUENCE;
+			}
+			if((*inputs)[DOWNKEY] > 0)
+			{
+				yPos += DIR_INFLUENCE;
+			}
+		}
+	}
+
 
 	//Same thing as next big if except without crouching and inputokay
 	//For detecting qcf qcb
