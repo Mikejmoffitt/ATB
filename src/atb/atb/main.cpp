@@ -87,6 +87,15 @@ int main(int argc, char **argv)
 		al_set_target_bitmap(mainBuffer);
 		barge->draw(background, 0,0,false,false);
 
+		Player1->handleInputs();
+		Player1->doPhysics();
+		Player1->animate();
+		Player1->blit(0);
+		Player2->handleInputs();
+		Player2->doPhysics();
+		Player2->animate();
+		Player2->blit(0);
+		
 		al_set_target_backbuffer(display);
 		al_draw_scaled_bitmap(mainBuffer,
 			0,0,baseX,baseY,0,0,windowX,windowY,0);

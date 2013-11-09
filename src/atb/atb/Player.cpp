@@ -419,13 +419,29 @@ void Player::handleInputs()
 		{
 			sprite->playAnimation(
 				direction?stdAnimIndexes[BACKANIM]:stdAnimIndexes[FORWARDANIM]);
-			vecX = direction?(backSpeed * -1):(fwdSpeed * -1);
+
+			if (direction)
+			{
+				vecX = backSpeed * -1;
+			}
+			else
+			{
+				vecX = fwdSpeed * -1;
+			}
 		}
 		else if ((*inputs)[RIGHTKEY] > 0)
 		{
 			sprite->playAnimation(
 				direction?stdAnimIndexes[FORWARDANIM]:stdAnimIndexes[BACKANIM]);
-			vecX = direction?(backSpeed):(fwdSpeed);
+
+			if (!direction)
+			{
+				vecX = backSpeed;
+			}
+			else
+			{
+				vecX = fwdSpeed;
+			}
 		}
 		else
 		{
@@ -480,9 +496,16 @@ void Player::doPhysics()
 {
 	std::cout << vecY << std::endl;
 	grounded = (yPos >= GROUNDPOS);
+	if (grounded)
+	{
+		yPos = GROUNDPOS;
+	}
+	else
+	{
+		yPos = yPos + vecY;
+	}
 
 	xPos = xPos + vecX;
-	yPos = yPos + vecY;
 	if (!grounded)
 	{
 		vecY = vecY + gravity;
