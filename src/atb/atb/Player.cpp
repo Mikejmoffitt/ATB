@@ -378,17 +378,14 @@ void Player::handleInputs()
 	Keys* inputs = isPlayer2? &(barge->p2keys) : &(barge->p1keys);
 	if (hitStun > 0 || blockStun > 0)
 	{
-		std::cout << "No input from hitStun or blockStun!" << std::endl;
 		inputOk = false;
 	}
 	else if (!grounded)
 	{
-		std::cout << "No input from !grounded!" << std::endl;
 		inputOk = false;
 	}
 	else if (doingNormal > 0 || doingSpecial > 0)
 	{
-		std::cout << "No input from doing a move!" << std::endl;
 		inputOk = false;
 	}
 	if (grounded)
@@ -409,6 +406,19 @@ void Player::handleInputs()
 			landDelay--;
 			vecX = 0;
 			vecY = 0;
+		}
+		if (inputOk)
+		{
+			// Face the other player when grounded
+			// not in the middle of an anim, though
+			if (xPos < other->xPos)
+			{
+				direction = true;
+			}
+			if (xPos > other->xPos)
+			{
+				direction = false;
+			}
 		}
 	}
 
@@ -443,7 +453,7 @@ void Player::handleInputs()
 				vecX = fwdSpeed;
 			}
 		}
-		else
+		else 
 		{
 			vecX = 0;
 			sprite->playAnimation(stdAnimIndexes[STANDANIM]);
@@ -457,7 +467,7 @@ void Player::handleInputs()
 		// Handling jumps
 		if ((*inputs)[UPKEY] > 0)
 		{
-			jumpDelay = jumpDelayMax;
+			jumpDelay = jumpDelayMax + 1;
 		}
 	}
 	if (inputOk && crouching)
@@ -474,18 +484,20 @@ void Player::handleInputs()
 		jumpDelay = 0;
 		grounded = false;
 		yPos = GROUNDPOS-1;
-		
 		vecY = jumpStrength * -1;
 		if ((*inputs)[LEFTKEY] > 0)
 		{
+			sprite->playAnimation(direction?stdAnimIndexes[JUMPBACKANIM]:stdAnimIndexes[JUMPFWDANIM]);
 			vecX = direction?(backJumpSpeed * -1):(fwdJumpSpeed * -1);
 		}
 		else if ((*inputs)[RIGHTKEY] > 0)
 		{
+			sprite->playAnimation(direction?stdAnimIndexes[JUMPFWDANIM]:stdAnimIndexes[JUMPBACKANIM]);
 			vecX = direction?(fwdJumpSpeed):(backJumpSpeed);
 		}
 		else
 		{
+			sprite->playAnimation(stdAnimIndexes[JUMPANIM]);
 			vecX = 0;
 		}
 		landDelay = landDelayMax;
@@ -537,6 +549,49 @@ void Player::loadSpriteBarge()
 
 void Player::boundsPush()
 {
+	int tries = 0;
+	while (checkBox(0,0) && tries < 16)
+	{
+		if (xPos < other->xPos)
+		{
+			if (yPos < other->yPos)
+			{
+				xPos--;
+			}
+			else
+			{
+				if (xPos > BOUNDS + 1)
+				{
+					xPos--;
+					other->xPos++;
+				}
+				else
+				{
+					other->xPos++;
+				}
+			}
+		}
+		if (xPos >= other->xPos)
+		{
+			if (yPos < other->yPos)
+			{
+				xPos++;
+			}
+			else
+			{
+				if (xPos < 640-BOUNDS-1)
+				{
+					xPos++;
+					other->xPos--;
+				}
+				else
+				{
+					other->xPos--;
+				}
+			}
+		}
+		tries++;
+	}
 	if (xPos < BOUNDS)
 	{
 		xPos = BOUNDS;
@@ -565,16 +620,54 @@ void Player::blit(int scrollX)
 	sprite->blit(floor(xPos) - (PLAYERWIDTH/2) - scrollX,yPos-(PLAYERHEIGHT),!direction,isPlayer2);
 }
 
+void Player::boxBlit(int scrollX)
+{
+	sprite->boxBlit(floor(xPos) - (PLAYERWIDTH/2) - scrollX,yPos-(PLAYERHEIGHT),!direction);
+}
+
 bool Player::checkBox(int a, int b)
 {
-	int x1 = sprite->getBoxX(a);
-	int y1 = sprite->getBoxY(a);
+	int x1;
+	if (direction)
+	{
+		x1 = xPos + (sprite->getBoxX(a));
+	}
+	else
+	{
+		x1 = xPos + (PLAYERWIDTH - sprite->getBoxX(a) - sprite->getBoxW(a));
+	}
+	int y1 = yPos + sprite->getBoxY(a);
 	int w1 = sprite->getBoxW(a);
 	int h1 = sprite->getBoxH(a);
-	int x2 = other->sprite->getBoxX(b);
-	int y2 = other->sprite->getBoxY(b);
+	int x2;
+	if (other->direction)
+	{
+		x2 = other->xPos + (other->sprite->getBoxX(a));
+	}
+	else
+	{
+		x2 = other->xPos + (PLAYERWIDTH - other->sprite->getBoxX(a) - other->sprite->getBoxW(a));
+	}
+	int y2 = other->yPos + other->sprite->getBoxY(b);
 	int w2 = other->sprite->getBoxW(b);
 	int h2 = other->sprite->getBoxH(b);
-	return !(x2 < (x1 + w1) || x1 > (x2 + w2) || y2 < (y1 + h1) || y1 > (y2 + h2) );
+	bool retval = true;
+	if (x1 + w1 < x2)
+	{
+		retval = false;
+	}
+	if (x2 + w2 < x1)
+	{
+		retval = false;
+	}
+	if (y1 + h1 < y2)
+	{
+		retval = false;
+	}
+	if (y2 + h2 < y1)
+	{
+		retval = false;
+	}
+	return retval;
 }
 

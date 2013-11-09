@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 		al_flip_display();
 		timer++;
 		//Needs to be handled by actual character select eventually
-		Player1 = new Player("chunex",false); //Pretend Players selected a character
-		Player2 = new Player("chunex",true);
+		Player1 = new Player("cfort",false); //Pretend Players selected a character
+		Player2 = new Player("cfort",true);
 		Player1->other = Player2;
 		Player2->other = Player1;
 		Player1->barge = barge;
@@ -103,10 +103,12 @@ int main(int argc, char **argv)
 		Player1->doPhysics();
 		Player1->animate();
 		Player1->blit(scroll);
+		Player1->boxBlit(scroll);
 		Player2->handleInputs();
 		Player2->doPhysics();
 		Player2->animate();
 		Player2->blit(scroll);
+		Player2->boxBlit(scroll);
 
 		
 		al_set_target_backbuffer(display);

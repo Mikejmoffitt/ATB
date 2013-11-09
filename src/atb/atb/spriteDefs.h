@@ -3,6 +3,9 @@
 #define ANIM_LENGTH 64
 #define NUM_BOXES 5
 
+#define SPRITEWIDTH 192
+#define SPRITEHEIGHT 128
+
 #define BOX_BODY 0
 #define BOX_VULN0 1
 #define BOX_VULN1 2

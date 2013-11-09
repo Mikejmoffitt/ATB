@@ -36,7 +36,7 @@ public:
 	void blit(int x, int y, bool flip, bool tint);
 
 	// Like above, but renders hitboxes
-	void boxBlit(int x, int y, int box);
+	void boxBlit(int x, int y, bool flip);
 
 	// A single animation tick is activated here
 	void animate();
@@ -78,6 +78,10 @@ public:
 	int getBoxH(int box);
 
 private:
+
+	ALLEGRO_BITMAP* greenBox;
+	ALLEGRO_BITMAP* redBox;
+	ALLEGRO_BITMAP* blueBox;
 
 	// Split a line into some elements
 	std::vector<std::string> strTokenize(std::string s, char delim);

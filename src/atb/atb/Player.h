@@ -12,7 +12,7 @@
 #include "Sprite.h"
 #include "Barge.h"
 
-#define GROUNDPOS 200
+#define GROUNDPOS 216
 #define MIN_X 640+72
 #define MAX_X 320-72
 
@@ -93,6 +93,9 @@ public:
 	// Renders the player on screen based on coordinates
 	void blit(int scrollX);
 
+	// Renders the player on screen based on coordinates
+	void boxBlit(int scrollX);
+
 	// Checks if hitbox a is colliding with enemy hitbox b
 	bool checkBox(int a, int b);
 
@@ -106,7 +109,18 @@ public:
 
 	void loadSpriteBarge();
 	// Load properties 
+	
+	// Game state variables
+	int health;
 
+	
+	int hitfreeze; // pause all action
+	bool direction; // Right == true
+	bool crouching;
+	bool grounded;
+	double slideX; // Sliding from doing an attack on the ground
+	double vecX;
+	double vecY;
 	double xPos;
 	double yPos;
 
@@ -196,17 +210,6 @@ private:
 	int jumpDelayMax;
 	int landDelayMax;
 
-	// Game state variables
-	int health;
-
-	
-	int hitfreeze; // pause all action
-	bool direction; // Right == true
-	bool crouching;
-	bool grounded;
-	double slideX; // Sliding from doing an attack on the ground
-	double vecX;
-	double vecY;
 
 	// Whether a normal is in progress
 	int doingNormal;

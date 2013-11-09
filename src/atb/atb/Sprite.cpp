@@ -2,12 +2,60 @@
 
 void Sprite::blit(int x, int y, bool flip, bool tint)
 {
-	barge->draw(getFrame(),
-		x + xOff[animNum][frameNum],y+yOff[animNum][frameNum],flip,tint);
+	if (!flip)
+	{
+		barge->draw(getFrame(),
+			x + xOff[animNum][frameNum],y+yOff[animNum][frameNum],flip,tint);
+	}
+	else
+	{
+		barge->draw(getFrame(),
+			x - xOff[animNum][frameNum],y+yOff[animNum][frameNum],flip,tint);
+	}
+}
+
+void Sprite::boxBlit(int x, int y, bool flip)
+{
+	for (int i = 0; i < NUM_BOXES; i++)
+	{
+		ALLEGRO_BITMAP* chr;
+		switch (i)
+		{
+		case BOX_BODY:
+			chr = greenBox;
+			break;
+		case BOX_VULN0:
+			chr = blueBox;
+			break;
+		case BOX_VULN1:
+			chr = blueBox;
+			break;
+		case BOX_VULN2:
+			chr = blueBox;
+			break;
+		case BOX_ATTACK:
+			chr = redBox;
+			break;
+		}
+		if (!flip)
+		{
+			al_draw_tinted_scaled_bitmap(chr,al_map_rgba(96,96,96,0),0,0,1,1,
+				x + xOff[animNum][frameNum] + getBoxX(i),y + yOff[animNum][frameNum] + getBoxY(i),getBoxW(i),getBoxH(i),0);
+		}
+		else
+		{
+			al_draw_tinted_scaled_bitmap(chr,al_map_rgba(96,96,96,0),0,0,1,1,
+				x - xOff[animNum][frameNum] + (SPRITEWIDTH - getBoxX(i) - getBoxW(i)),y + yOff[animNum][frameNum] + getBoxY(i),
+				getBoxW(i),getBoxH(i),0);
+		}
+	}
 }
 
 Sprite::Sprite(std::string name)
 {
+	redBox = al_load_bitmap("data/gfx/redBox.png");
+	greenBox = al_load_bitmap("data/gfx/greenBox.png");
+	blueBox = al_load_bitmap("data/gfx/blueBox.png");
 	charName = name;
 	animNum = 0;
 	frameNum = 0;
@@ -164,6 +212,9 @@ Sprite::~Sprite()
 			}
 		}
 	}
+	al_destroy_bitmap(redBox);
+	al_destroy_bitmap(greenBox);
+	al_destroy_bitmap(blueBox);
 }
 
 void Sprite::animate()
@@ -301,19 +352,6 @@ std::vector<int> Sprite::strToki(std::string s, char delim)
 	}
 	return e;
 }
-
-//bool Sprite::boxCol(Sprite* other, int myBox, int otherBox)
-//{
-//	int x1 = getBoxX(myBox);
-//	int y1 = getBoxY(myBox);
-//	int w1 = getBoxW(myBox);
-//	int h1 = getBoxH(myBox);
-//	int x2 = other->getBoxX(otherBox);
-//	int y2 = other->getBoxY(otherBox);
-//	int w2 = other->getBoxW(otherBox);
-//	int h2 = other->getBoxH(otherBox);
-//	return !(x2 < (x1 + w1) || x1 > (x2 + w2) || y2 < (y1 + h1) || y1 > (y2 + h2) );
-//}
 
 int Sprite::getBoxX(int box)
 {
