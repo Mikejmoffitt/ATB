@@ -1,7 +1,16 @@
 #include <stdio.h>
-#include "allegro5/allegro.h"
-#include "allegro5/allegro_primitives.h"
-#include "allegro5/allegro_image.h"
+#include <zlib.h>
+#include <physfs.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_native_dialog.h>
 #include "Sprite.h"
 
 const int baseX = 320;
@@ -13,6 +22,9 @@ const int windowY = 480;
 int main(int argc, char **argv)
 {
 	al_init();
+	al_install_audio();
+	al_init_acodec_addon();
+	al_reserve_samples(16);
 	
 	al_set_new_display_flags(ALLEGRO_RESIZABLE);
 	al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST);
@@ -30,6 +42,9 @@ int main(int argc, char **argv)
 	example->barge = barge;
 	example2->barge = barge;
 	int timer = 0;
+	ALLEGRO_SAMPLE* sample = al_load_sample("data/testmus.ogg");
+	std::cout << "OH MY GOD " << sample << std::endl;
+	al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_LOOP,0);
 	while (timer < 1800)
 	{
 		barge->poll();
@@ -48,6 +63,8 @@ int main(int argc, char **argv)
 		al_flip_display();
 		timer++;
 	}
+	al_stop_samples();
+	al_destroy_sample(sample);
 	delete(example);
 	delete(example2);
 	delete(barge);

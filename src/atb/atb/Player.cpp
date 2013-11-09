@@ -16,6 +16,7 @@ Player::Player(std::string playerName, bool isP2)
 	ss << CHAR_DIR << playerName << "/player.cfg";
 	metaCfg = al_load_config_file(ss.str().c_str());
 
+	// Load basic animation cues
 	displayName = al_get_config_value(metaCfg,"playerMeta","displayName");
 	health = atoi(al_get_config_value(metaCfg,"playerMeta","health"));
 	gravity = atof(al_get_config_value(metaCfg,"playerMeta","gravity"));
@@ -27,6 +28,9 @@ Player::Player(std::string playerName, bool isP2)
 	jumpDelayMax = atof(al_get_config_value(metaCfg,"playerMeta","jumpDelay"));
 	landDelayMax = atof(al_get_config_value(metaCfg,"playerMeta","landDelay"));
 
+	
+
+
 
 	// Clear out state variables
 	qcf = 0;
@@ -35,5 +39,4 @@ Player::Player(std::string playerName, bool isP2)
 	bdp = 0;
 	fcharge = 0;
 	bcharge = 0;
-
 }

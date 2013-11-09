@@ -16,6 +16,25 @@
 #define MIN_X 640+72
 #define MAX_X 320-72
 
+#define STANDANIM 0
+#define CROUCHANIM 1
+#define FORDWARDANIM 2
+#define BACKANIM 3
+#define JUMPANIM 4
+#define JUMPFWDANIM 5
+#define JUMPBACKANIM 6
+#define THROWANIM 7
+#define GRABANIM 8
+#define DOWNANIM 9
+#define GETUPANIM 10
+#define WINANIM 11
+#define LOSEANIM 12
+#define BLOCKANIM 13
+#define BLOCKLOWANIM 14
+#define REELANIM 15
+
+#define NUM_STD_ANIMS 16
+
 class Player
 {
 public:
@@ -58,6 +77,9 @@ public:
 	// Load properties 
 
 private:
+
+	// Animation indexes for standard anims
+	int stdAnimIndexes[NUM_STD_ANIMS];
 
 	bool isPlayer2;
 
@@ -111,7 +133,4 @@ private:
 
 	// Whether player is going to be knocked down upon landing
 	bool knockDown;
-
-	// Amount to slide back from hits, etc.
-	double slideX;
 };
