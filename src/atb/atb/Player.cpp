@@ -567,5 +567,14 @@ void Player::blit(int scrollX)
 
 bool Player::checkBox(int a, int b)
 {
-	return false;
+	int x1 = sprite->getBoxX(a);
+	int y1 = sprite->getBoxY(a);
+	int w1 = sprite->getBoxW(a);
+	int h1 = sprite->getBoxH(a);
+	int x2 = other->sprite->getBoxX(b);
+	int y2 = other->sprite->getBoxY(b);
+	int w2 = other->sprite->getBoxW(b);
+	int h2 = other->sprite->getBoxH(b);
+	return !(x2 < (x1 + w1) || x1 > (x2 + w2) || y2 < (y1 + h1) || y1 > (y2 + h2) );
 }
+
