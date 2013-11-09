@@ -5,6 +5,11 @@ bool Player::freezeGame()
 	hitfreeze--;
 	return (hitfreeze>0);
 }
+
+void Player::loadSpriteBarge()
+{
+	sprite->barge = barge;
+}
 std::vector<std::string> Player::strTokenize(std::string s, char delim)
 {
 	const char EOL = '\n';
@@ -103,11 +108,11 @@ Player::Player(std::string playerName, bool isP2)
 {
 	name = playerName;
 	sprite = new Sprite(name);
-	sprite->barge = barge;
 	isPlayer2 = isP2;
 	std::stringstream ss;
 
 	ss << CHAR_DIR << playerName << "/player.cfg";
+	
 	metaCfg = al_load_config_file(ss.str().c_str());
 
 	// Load basic animation cues
@@ -133,31 +138,31 @@ Player::Player(std::string playerName, bool isP2)
 		switch (l_input)
 		{
 		case I_N:
-			inputVar = "[n]-";
+			inputVar = "n-";
 			break;
 		case I_B:
-			inputVar = "[b]-";
+			inputVar = "b-";
 			break;
 		case I_F:
-			inputVar = "[f]-";
+			inputVar = "f-";
 			break;
 		case I_QCF:
-			inputVar = "[qcf]-";
+			inputVar = "qcf-";
 			break;
 		case I_QCB:
-			inputVar = "[qcb]-";
+			inputVar = "qcb-";
 			break;
 		case I_FDP:
-			inputVar = "[fdp]-";
+			inputVar = "fdp-";
 			break;
 		case I_BDP:
-			inputVar = "[bdp]-";
+			inputVar = "bdp-";
 			break;
 		case I_FCHARGE:
-			inputVar = "[fcharge]-";
+			inputVar = "fcharge-";
 			break;
 		case I_BCHARGE:
-			inputVar = "[bcharge]-";
+			inputVar = "bcharge-";
 			break;
 		}
 		for (int l_button = 0; l_button < BUTTON_NUM; l_button++)
@@ -165,24 +170,31 @@ Player::Player(std::string playerName, bool isP2)
 			switch (l_button)
 			{
 			case 0:
-				buttonVar = "[p]-";
+				buttonVar = "p-";
+				break;
 			case 1:
-				buttonVar = "[k]-";
+				buttonVar = "k-";
+				break;
 			}
 			for (int l_locus = 0; l_locus < LOCUS_NUM; l_locus++)
 			{
 				switch (l_locus)
 				{
 				case L_GROUND:
-					locusVar = "[ground]";
+					locusVar = "ground";
+					break;
 				case L_AIR:
-					locusVar = "[air]";
+					locusVar = "air";
+					break;
 				case L_AIRMOVING:
-					locusVar = "[airmoving]";
+					locusVar = "airmoving";
+					break;
 				case L_CROUCH:
-					locusVar = "[crouch]";
+					locusVar = "crouch";
+					break;
 				case L_SPECIAL:
-					locusVar = "[special]";
+					locusVar = "special";
+					break;
 				}
 
 				ss << inputVar << buttonVar << locusVar;
@@ -191,100 +203,109 @@ Player::Player(std::string playerName, bool isP2)
 
 				if (al_get_config_value(metaCfg,ss.str().c_str(),"enabled") != NULL)
 				{
-
+					std::cout << "This one exists... ";
 					a_enabled[l_input][l_button][l_locus] = atoi(
 						al_get_config_value(metaCfg,ss.str().c_str(),"enabled"));
-					a_whiffSnd[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"whiffSnd"));
-					a_hitSnd[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"hitSnd"));
-					a_animNum[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"animNum"));
-					a_damage[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"damage"));
-					a_chipDamage[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"chipDamage"));
-					a_knockDown[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"knockdown"));
-					a_freeze[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"freeze"));
-					a_hitStun[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"hitStun"));
-					a_normalCancel[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"normalCancel"));
-					a_hitType[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"hitType"));
 
-					std::vector<int> tempstuff = strToki(
-						al_get_config_value(metaCfg,ss.str().c_str(),"vecStepDelay"),',');
-					for (unsigned int i = 0; i < tempstuff.size(); i++)
+					if (a_enabled[l_input][l_button][l_locus])
 					{
-						a_vecStepDelay[l_input][l_button][l_locus].push_back(tempstuff[i]);
-					}
-				
-					// Populate terrifying move data
-					tempstuff = strToki(
-						al_get_config_value(metaCfg,ss.str().c_str(),"relativeVecX"),',');
-					for (unsigned int i = 0; i < tempstuff.size(); i++)
-					{
-						a_relativeVecX[l_input][l_button][l_locus].push_back(tempstuff[i]);
-					}
-					tempstuff = strToki(
-						al_get_config_value(metaCfg,ss.str().c_str(),"relativeVecY"),',');
-					for (unsigned int i = 0; i < tempstuff.size(); i++)
-					{
-						a_relativeVecY[l_input][l_button][l_locus].push_back(tempstuff[i]);
-					}
+						std::cout << "it is enabled. " << std::endl;
+						a_whiffSnd[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"whiffSnd"));
+						a_hitSnd[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"hitSnd"));
+						a_animNum[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"animNum"));
+						a_damage[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"damage"));
+						a_chipDamage[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"chipDamage"));
+						a_knockDown[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"knockdown"));
+						a_freeze[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"freeze"));
+						a_hitStun[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"hitStun"));
+						a_normalCancel[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"normalCancel"));
+						a_hitType[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"hitType"));
 
-					a_knockBackVecX[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"knockBackVecX"));
-					a_knockBackVecY[l_input][l_button][l_locus] = atoi(
-						al_get_config_value(metaCfg,ss.str().c_str(),"knockBackVecY"));
+						std::vector<int> tempstuff = strToki(
+							al_get_config_value(metaCfg,ss.str().c_str(),"vecStepDelay"),',');
+						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						{
+							a_vecStepDelay[l_input][l_button][l_locus].push_back(tempstuff[i]);
+						}
 				
-					std::vector<double> dstuff = strTokd(
-						al_get_config_value(metaCfg,ss.str().c_str(),"vecX"),',');
-					for (unsigned int i = 0; i < tempstuff.size(); i++)
-					{
-						a_vecX[l_input][l_button][l_locus].push_back(dstuff[i]);
-					}
-					std::vector<double> dstuff = strTokd(
-						al_get_config_value(metaCfg,ss.str().c_str(),"vecY"),',');
-					for (unsigned int i = 0; i < tempstuff.size(); i++)
-					{
-						a_vecY[l_input][l_button][l_locus].push_back(dstuff[i]);
-					}
-					std::vector<double> dstuff = strTokd(
-						al_get_config_value(metaCfg,ss.str().c_str(),"dVecX"),',');
-					for (unsigned int i = 0; i < tempstuff.size(); i++)
-					{
-						a_dVecX[l_input][l_button][l_locus].push_back(dstuff[i]);
-					}
-					std::vector<double> dstuff = strTokd(
-						al_get_config_value(metaCfg,ss.str().c_str(),"dVecY"),',');
-					for (unsigned int i = 0; i < tempstuff.size(); i++)
-					{
-						a_dVecY[l_input][l_button][l_locus].push_back(dstuff[i]);
-					}
-					if (al_get_config_value(metaCfg,ss.str().c_str(),"projectile") != NULL)
-					{
-						a_projectile[l_input][l_button][l_locus] = atoi(
-							al_get_config_value(metaCfg,ss.str().c_str(),"projectile"));
-						a_projectileDelay[l_input][l_button][l_locus] = atoi(
-							al_get_config_value(metaCfg,ss.str().c_str(),"projectileDelay"));
-						a_projectileAnim[l_input][l_button][l_locus] = atoi(
-							al_get_config_value(metaCfg,ss.str().c_str(),"projectileAnim"));
-						a_projectileVecX[l_input][l_button][l_locus] = atof(
-							al_get_config_value(metaCfg,ss.str().c_str(),"projectileVecX"));
-						a_projectileVecY[l_input][l_button][l_locus] = atof(
-							al_get_config_value(metaCfg,ss.str().c_str(),"projectileVecY"));
-						a_projectileDVecX[l_input][l_button][l_locus] = atof(
-							al_get_config_value(metaCfg,ss.str().c_str(),"projectileDVecX"));
-						a_projectileDVecY[l_input][l_button][l_locus] = atof(
-							al_get_config_value(metaCfg,ss.str().c_str(),"projectileDVecY"));
-						a_projectileLife[l_input][l_button][l_locus] = atoi(
-							al_get_config_value(metaCfg,ss.str().c_str(),"projectileLife"));
-						a_projectileHitSnd[l_input][l_button][l_locus] = atoi(
-							al_get_config_value(metaCfg,ss.str().c_str(),"projectileHitSnd"));
+						// Populate terrifying move data
+						tempstuff = strToki(
+							al_get_config_value(metaCfg,ss.str().c_str(),"relativeVecX"),',');
+						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						{
+							a_relativeVecX[l_input][l_button][l_locus].push_back(tempstuff[i]);
+						}
+						tempstuff = strToki(
+							al_get_config_value(metaCfg,ss.str().c_str(),"relativeVecY"),',');
+						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						{
+							a_relativeVecY[l_input][l_button][l_locus].push_back(tempstuff[i]);
+						}
+
+						a_knockBackVecX[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"knockBackVecX"));
+						a_knockBackVecY[l_input][l_button][l_locus] = atoi(
+							al_get_config_value(metaCfg,ss.str().c_str(),"knockBackVecY"));
+				
+						std::vector<double> dstuff = strTokd(
+							al_get_config_value(metaCfg,ss.str().c_str(),"vecX"),',');
+						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						{
+							a_vecX[l_input][l_button][l_locus].push_back(dstuff[i]);
+						}
+						dstuff = strTokd(
+							al_get_config_value(metaCfg,ss.str().c_str(),"vecY"),',');
+
+						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						{
+							//a_vecY[l_input][l_button][l_locus].push_back(dstuff[i]);
+						}
+						dstuff = strTokd(
+							al_get_config_value(metaCfg,ss.str().c_str(),"dVecX"),',');
+						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						{
+							//a_dVecX[l_input][l_button][l_locus].push_back(dstuff[i]);
+						}
+						dstuff = strTokd(
+							al_get_config_value(metaCfg,ss.str().c_str(),"dVecY"),',');
+						for (unsigned int i = 0; i < tempstuff.size(); i++)
+						{
+							//a_dVecY[l_input][l_button][l_locus].push_back(dstuff[i]);
+						}
+						if (al_get_config_value(metaCfg,ss.str().c_str(),"projectile") != NULL)
+						{
+							a_projectile[l_input][l_button][l_locus] = atoi(
+								al_get_config_value(metaCfg,ss.str().c_str(),"projectile"));
+							if (a_projectile[l_input][l_button][l_locus])
+							{
+								a_projectileDelay[l_input][l_button][l_locus] = atoi(
+									al_get_config_value(metaCfg,ss.str().c_str(),"projectileDelay"));
+								a_projectileAnim[l_input][l_button][l_locus] = atoi(
+									al_get_config_value(metaCfg,ss.str().c_str(),"projectileAnim"));
+								a_projectileVecX[l_input][l_button][l_locus] = atof(
+									al_get_config_value(metaCfg,ss.str().c_str(),"projectileVecX"));
+								a_projectileVecY[l_input][l_button][l_locus] = atof(
+									al_get_config_value(metaCfg,ss.str().c_str(),"projectileVecY"));
+								a_projectileDVecX[l_input][l_button][l_locus] = atof(
+									al_get_config_value(metaCfg,ss.str().c_str(),"projectileDVecX"));
+								a_projectileDVecY[l_input][l_button][l_locus] = atof(
+									al_get_config_value(metaCfg,ss.str().c_str(),"projectileDVecY"));
+								a_projectileLife[l_input][l_button][l_locus] = atoi(
+									al_get_config_value(metaCfg,ss.str().c_str(),"projectileLife"));
+								a_projectileHitSnd[l_input][l_button][l_locus] = atoi(
+									al_get_config_value(metaCfg,ss.str().c_str(),"projectileHitSnd"));
+							}
+						}
 					}
 				}
 				else

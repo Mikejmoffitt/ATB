@@ -61,7 +61,6 @@ int main(int argc, char **argv)
 	al_stop_samples();
 	al_destroy_sample(sample);
 	delete(example);
-	delete(example2);
 	delete(barge);
 	al_destroy_bitmap(mainBuffer);
 	al_destroy_display(display);

@@ -115,7 +115,7 @@ Inside the player config file, we must have the following sections:
 	fwdSpeed = double (pixels per second)
 	backSpeed = double
 	fwdJumpSpeed = double
-	fwdBackSpeed = double
+	backJumpSpeed = double
 	jumpStrength = double (pixels per second per second)
 	jumpDelay = int (frames before jump)
 	landDelay = int (frameS after jump)	
@@ -173,7 +173,7 @@ like this, nice and human-readable.
 	dVecY = double[]          // same for Y
 	                          
 	knockBackVecX = double    // knockback x vector for hit victim
-	kockBackVecY = double     // knockback y vector for hit victim in air
+	knockBackVecY = double     // knockback y vector for hit victim in air
                               // or for if a knockdown has been triggered which
 							  // will briefly put the victim airborn before
 							  // landing again

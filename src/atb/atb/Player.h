@@ -74,10 +74,11 @@ public:
 	int fcharge;
 	int bcharge;
 
+	void loadSpriteBarge();
 	// Load properties 
 
 private:
-	
+
 	
 	std::vector<std::string> strTokenize(std::string s, char delim);
 	std::vector<int> strToki(std::string s, char delim);
