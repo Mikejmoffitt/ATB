@@ -279,7 +279,6 @@ std::vector<int> Sprite::strToki(std::string s, char delim)
 			//needless vector resizing
 		}
 	}
-
 	e.reserve(reserve);
 
 	std::string elem;
@@ -296,4 +295,9 @@ std::vector<int> Sprite::strToki(std::string s, char delim)
 		}
 	}
 	return e;
+}
+
+bool Sprite::boxCol(Sprite* other, int myBox, int otherBox)
+{
+
 }

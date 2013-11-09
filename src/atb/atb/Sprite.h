@@ -64,8 +64,17 @@ public:
 
 	// Get number of frames of an animation (not duration!)
 	unsigned int numFrames(int num);
+
 	// Accessors for readability
 	ALLEGRO_BITMAP* getFrame();
+
+	// Check box collision
+	// Pointer to other sprite, which local box, which box from the other
+
+	// Basically, check if this sprite's box #(myBox) is overlapping the other
+	// sprite's #(otherBox).
+	bool boxCol(Sprite* other, int myBox, int otherBox);
+
 
 private:
 
