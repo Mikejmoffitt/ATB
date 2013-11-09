@@ -77,6 +77,71 @@ public:
 	// Load properties 
 
 private:
+	
+	
+	std::vector<std::string> strTokenize(std::string s, char delim);
+	std::vector<int> strToki(std::string s, char delim);
+	std::vector<double> strTokd(std::string s, char delim);
+
+	// Attack parameters
+#define INPUT_NUM 9
+#define BUTTON_NUM 2
+#define LOCUS_NUM 4
+
+#define I_N 0
+#define I_B 1
+#define I_F 2
+#define I_QCF 3
+#define I_QCB 4
+#define I_FDP 5
+#define I_BDP 6
+#define I_FCHARGE 7
+#define I_BCHARGE 8
+
+#define L_GROUND 0
+#define L_AIR 1
+#define L_AIRMOVING 2
+#define L_CROUCH 3
+#define L_SPECIAL 4
+
+#define HIT_HI 0
+#define HIT_MED 1
+#define HIT_LOW 2
+
+	// Regular meta stuff
+	int  a_enabled[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int  a_whiffSnd[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int  a_hitSnd[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int  a_animNum[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int  a_damage[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int  a_chipDamage[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	bool a_knockDown[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int  a_freeze[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int  a_hitStun[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	bool a_normalCancel[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int  a_hitType[INPUT_NUM][BUTTON_NUM][LOCUS_NUM]; 
+
+	// Movement stuff!
+	double              a_knockBackVecX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	double              a_knockBackVecY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	std::vector<int>    a_vecStepDelay[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	std::vector<bool>   a_relativeVecX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	std::vector<bool>   a_relativeVecY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	std::vector<double> a_vecX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	std::vector<double> a_vecY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	std::vector<double> a_dVecX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	std::vector<double> a_dVecY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+
+	// Projectile properties
+	bool   a_projectile[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int    a_projectileDelay[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int    a_projectileAnim[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	double a_projectileVecX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	double a_projectileVecY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	double a_projectileDVecX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	double a_projectileDVecY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int    a_projectileLife[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+	int    a_projectileHitSnd[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];	
 
 	// Animation indexes for standard anims
 	int stdAnimIndexes[NUM_STD_ANIMS];

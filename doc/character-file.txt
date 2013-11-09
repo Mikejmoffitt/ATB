@@ -12,7 +12,7 @@ filed.
 
 == ATTACK SLOTS ==
 
-As the game is internally a four button game, so for each four buttons consider
+As the game is internally a two button game, so for each two buttons consider
 one of the following each:
 
 =NORMALS=
@@ -26,20 +26,6 @@ one of the following each:
  -Holding moving back in air
  -Holding moving forward in air
 **Neutral crouching
- -Holding back while crouching
- -Holding forward while crouching
-
-=CLOSE NORMALS=
- -Neutral ground
- -Holding back on ground
- -Holding forward on ground
- -Neutral moving in air
- -Holding moving back in air
- -Holding moving forward in air
- -Neutral in air
- -Holding back in air
- -Holding forward in air
- -Neutral crouching
  -Holding back while crouching
  -Holding forward while crouching
 
@@ -79,7 +65,7 @@ it will default to the normal one.
 
 This means that the attacks that have been marked with an asterisk are the only
 ones that are strictly required by the game engine to be present. In other 
-words, (4 buttons) * (6 attacks). 
+words, (2 buttons) * (6 attacks). 
 
 ...I mean, I guess you could leave all slots disabled, but your character is
 not going to be so useful. 
@@ -92,45 +78,31 @@ go in any order.
 Each section will be named this way:
 
 Normals:
-[dir]-[close-][locus]-[button]
+[input]-[button]-[locus]
 
-Specials:
-[command]-[button]
 
 Values for each:
-[dir]:
+[input]:
 	n - neutral
 	b - back
 	f - forward
-
-[close-]
-	"close-" - if it is a close move. Otherwise, put nothing.
+	qcf - quarter circle forward
+	qcb - quarter circle back
+	fdp - forward dp
+	bdp - back dp
+	fcharge - forward charge
+	upcharge - upwards charge
 	
 [locus]
 	ground - ground
 	air - air
+	airmoving - air moving
 	crouch - crouch. Did any of this need explaining? 
+	special - special move, not at a place.
 
 [button]
-	lp - light punch
-	hp - hard punch
-	lk - light kick
-	hk - hard kick
-	
-[command]
-	qcf - quarter circle forward
-	qcb - quarter circle back
-	fcharge - forward charge
-	upcharge - upwards charge
-	
-Here are some examples:
-[n-ground-lp]
-[f-close-crouch-lk]
-[b-air-hp]
-[qcf-hp]
-[fcharge-hk]
-
-That's not so bad, eh?
+	p - light punch
+	k - light kick
 
 == THE DATA FORMAT FOR PLAYER DATA SECTIONS ==
 

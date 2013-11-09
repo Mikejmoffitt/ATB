@@ -37,7 +37,7 @@ public:
 	void draw(ALLEGRO_BITMAP* chr, int xPos, int yPos, bool flip, bool tint);
 
 private:
-	
+
 	ALLEGRO_CONFIG* gameCfg;
     ALLEGRO_JOYSTICK* joyPad1;
     ALLEGRO_JOYSTICK* joyPad2;
