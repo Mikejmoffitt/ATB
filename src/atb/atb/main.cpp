@@ -12,6 +12,8 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_native_dialog.h>
 #include "Sprite.h"
+#include "Barge.h"
+#include "Player.h"
 
 const int baseX = 320;
 const int baseY = 240;
@@ -34,28 +36,21 @@ int main(int argc, char **argv)
 	
 	al_init_primitives_addon();
 	al_init_image_addon();
-	
-	Sprite* example = new Sprite("example");
-	Sprite* example2 = new Sprite("chunex");
+
+	Player* example = new Player("chunex",false);
 
 	Barge* barge = new Barge("c:/atb.ini");
 	example->barge = barge;
-	example2->barge = barge;
 	int timer = 0;
 	ALLEGRO_SAMPLE* sample = al_load_sample("data/testmus.ogg");
-	std::cout << "OH MY GOD " << sample << std::endl;
 	al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_LOOP,0);
 	while (timer < 1800)
 	{
 		barge->poll();
 		al_set_target_bitmap(mainBuffer);
 		al_clear_to_color(al_map_rgb(255 - timer,(timer * 2) % 255,timer%255));
-		example->animate();
-		example2->animate();
 
 		// Just shows the animation script does play properly...
-		
-		example->blit(32 - 0,48,1,0);
 
 		al_set_target_backbuffer(display);
 		al_draw_scaled_bitmap(mainBuffer,

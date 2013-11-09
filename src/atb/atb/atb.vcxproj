@@ -71,12 +71,14 @@
   <ItemGroup>
     <ClCompile Include="Barge.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Barge.h" />
     <ClInclude Include="bargeDefs.h" />
     <ClInclude Include="dirDefs.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="spriteDefs.h" />
   </ItemGroup>

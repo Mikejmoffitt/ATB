@@ -103,6 +103,7 @@ Player::Player(std::string playerName, bool isP2)
 {
 	name = playerName;
 	sprite = new Sprite(name);
+	sprite->barge = barge;
 	isPlayer2 = isP2;
 	std::stringstream ss;
 
@@ -185,6 +186,8 @@ Player::Player(std::string playerName, bool isP2)
 				}
 
 				ss << inputVar << buttonVar << locusVar;
+
+				std::cout << "Loading " << ss.str() << " for " << name << std::endl;
 
 				if (al_get_config_value(metaCfg,ss.str().c_str(),"enabled") != NULL)
 				{
@@ -293,7 +296,7 @@ Player::Player(std::string playerName, bool isP2)
 			}
 		}
 	}
-
+	std::cout << "Done loading INI info." << std::endl;
 
 
 	// Clear out state variables
