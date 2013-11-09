@@ -150,8 +150,12 @@ Inside the player config file, we must have the following sections:
 
 [playerAnims] ; This defines animation sequences for non-attacks
 	standAnim = int
-	crouchANim = int
-	
+	crouchAnim = int
+	forwardAnim = int
+	backAnim = int
+	jumpAnim = int
+	jumpFwdAnim = int
+	jumpBackAnim = int
 	
 
 == THE DATA FORMAT FOR ATTACK SECTIONS == 
