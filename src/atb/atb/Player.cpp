@@ -217,14 +217,12 @@ Player::Player(std::string playerName, bool isP2)
 
 					if (a_enabled[l_input][l_button][l_locus])
 					{
-						std::cout << "enabled for " << ss.str() << std::endl;
 						a_whiffSnd[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"whiffSnd"));
 						a_hitSnd[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"hitSnd"));
 						a_animNum[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"animNum"));
-						std::cout << "Animation number " << a_animNum[l_input][l_button][l_locus] << std::endl;
 						a_damage[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"damage"));
 						a_chipDamage[l_input][l_button][l_locus] = atoi(
@@ -263,11 +261,9 @@ Player::Player(std::string playerName, bool isP2)
 
 						a_knockBackVecX[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"knockBackVecX"));
-						std::cout << "knockBackVecX: " << a_knockBackVecX[l_input][l_button][l_locus] << std::endl;
 						a_knockBackVecY[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"knockBackVecY"));
-						std::cout << "knockBackVecY: " << a_knockBackVecY[l_input][l_button][l_locus] << std::endl;
-				
+						
 						std::vector<double> dstuff = strTokd(
 							al_get_config_value(metaCfg,ss.str().c_str(),"vecX"),',');
 						for (unsigned int i = 0; i < dstuff.size(); i++)
