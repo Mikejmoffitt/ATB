@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 		charBMs[i] = c;
 	}
 
-	Barge* barge = new Barge("c:/atb.ini");
+	Barge* barge = new Barge("atb.ini");
 	int timer = 0;
 	//Character Select song
 	ALLEGRO_SAMPLE* sample = al_load_sample("data/testmus.ogg");
@@ -210,7 +210,14 @@ int main(int argc, char **argv)
 
 		if (barge->p1keys[STARTKEY] == 1)
 		{
-			showBoxes ^= showBoxes;
+			if (showBoxes)
+			{
+				showBoxes = false;
+			}
+			else
+			{
+				showBoxes = true;
+			}
 		}
 
 
