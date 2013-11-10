@@ -136,8 +136,9 @@ Player::Player(std::string playerName, bool isP2)
 	stdAnimIndexes[LOSEANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","loseAnim"));
 	stdAnimIndexes[BLOCKANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","blockAnim"));
 	stdAnimIndexes[BLOCKLOWANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","blockLowAnim"));
-	stdAnimIndexes[REELANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","reelAnim"));
+	stdAnimIndexes[REELAIRANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","reelAirAnim"));
 	stdAnimIndexes[PREJUMPANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","preJumpAnim"));
+	stdAnimIndexes[REELANIM] = atoi(al_get_config_value(metaCfg,"playerAnims","reelAnim"));
 
 	std::string inputVar = "n";
 	std::string buttonVar = "p";
@@ -668,8 +669,16 @@ void Player::handleInputs()
 			}
 		}
 	}
-
 	
+	if (!grounded && hitStun > 0)
+	{
+		sprite->playAnimation(stdAnimIndexes[REELAIRANIM]);
+	}
+	if (grounded && hitStun > 0)
+	{
+		sprite->playAnimation(stdAnimIndexes[REELANIM]);
+	}
+
 	if (xPos < other->xPos)
 	{
 		direction = true;
@@ -681,11 +690,23 @@ void Player::handleInputs()
 
 	if (blockStun > 0)
 	{
+		if (crouching)
+		{
+			sprite->playAnimation(stdAnimIndexes[BLOCKLOWANIM]);
+		}
+		else
+		{
+			sprite->playAnimation(stdAnimIndexes[BLOCKANIM]);
+		}
 		blockStun--;
 		knockDown = 0;
 	}
 	if (grounded)
 	{
+		if (blockStun == 0 && hitStun == 0 && crouching && doingNormal == 0 && doingSpecial == 0)
+		{
+			sprite->playAnimation(stdAnimIndexes[CROUCHANIM]);
+		}
 		if (hitStun > 0)
 		{
 			hitStun--;

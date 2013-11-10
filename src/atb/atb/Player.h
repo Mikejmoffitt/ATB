@@ -43,12 +43,13 @@
 #define BLOCKLOWANIM 14
 #define REELANIM 15
 #define PREJUMPANIM 16
+#define REELAIRANIM 17
 
 #define LENIENCY 7
 
 #define DIR_INFLUENCE 0.55
 
-#define NUM_STD_ANIMS 17
+#define NUM_STD_ANIMS 18
 
 class Player
 {
