@@ -422,6 +422,89 @@ void Player::handleInputs()
 		}
 	}
 
+	//Same thing as next big if except without crouching and inputokay
+	//For detecting qcf qcb
+	if ((*inputs)[LEFTKEY] > 0)
+	{
+		if (direction)
+		{
+			if(downBack > 0)
+			{
+				if ((*inputs)[DOWNKEY] > 0){}
+				else
+				{
+					qcb = LENIENCY;
+					std::cout << "QCB!!!" << std::endl;
+				}
+			}							 
+		}
+		else
+		{
+			if(downForward >0)
+			{
+				if ((*inputs)[DOWNKEY] > 0){}
+				else
+				{
+					qcf = LENIENCY;
+					std::cout << "QCf!!!" << std::endl;
+				}
+			}
+		}
+	}
+	else if ((*inputs)[RIGHTKEY] > 0)
+	{
+			
+		if (!direction)
+		{
+			if(downBack > 0)
+			{
+				if ((*inputs)[DOWNKEY] > 0){}
+				else
+				{
+					qcb = LENIENCY;
+					std::cout << "QCB!!!" << std::endl;
+				}
+			}							 
+		}
+		else
+		{
+			if(downForward >0)
+			{
+				if ((*inputs)[DOWNKEY] > 0){}
+				else
+				{
+					qcf = LENIENCY;
+					std::cout << "QCf!!!" << std::endl;
+				}
+			}
+		}
+	}
+	else
+	{
+		if ((*inputs)[DOWNKEY] > 0)
+			down = LENIENCY;
+	}
+	if ((*inputs)[DOWNKEY] > 0)
+	{
+		if ((*inputs)[RIGHTKEY] > 0)
+		{
+			if(down > 0)
+				if(!direction)
+					downBack = LENIENCY;
+				else
+					downForward = LENIENCY;
+		}
+		else if((*inputs)[LEFTKEY] > 0)
+		{
+			if(down > 0)
+				if(direction)
+					downBack = LENIENCY;
+				else
+					downForward = LENIENCY;
+		}
+			
+	}
+
 	if (inputOk && !crouching)
 	{
 		// walking left and right
@@ -502,6 +585,16 @@ void Player::handleInputs()
 		}
 		landDelay = landDelayMax;
 	}
+	if(down > 0)
+		down--;
+	if(downForward > 0)
+		downForward--;
+	if(forward > 0)
+		forward--;
+	if(downBack>0)
+		downBack--;
+	if(back > 0)
+		back--;
 }
 
 void Player::doPhysics()

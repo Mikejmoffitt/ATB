@@ -41,6 +41,8 @@
 #define BLOCKLOWANIM 14
 #define REELANIM 15
 #define PREJUMPANIM 16
+#define LENIENCY 2
+
 
 #define DIR_INFLUENCE 0.05
 
@@ -61,6 +63,9 @@ public:
 
 	std::string name;
 	std::string displayName;
+	//Activates when ONLY direction pressed
+	int down,downForward,forward,downBack,back;
+
 	
 	// Check if other has the attacking hitbox (4) overlapping our 
 	// player's vuln boxes (1-3)
