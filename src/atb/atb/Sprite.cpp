@@ -92,7 +92,14 @@ Sprite::Sprite(std::string name)
 			std::vector<int> xOffTokens = strToki(intString,',');
 			intString = al_get_config_value(animCfg,section.c_str(),"yOff");
 			std::vector<int> yOffTokens = strToki(intString,',');
-			intString = al_get_config_value(animCfg,section.c_str(),"durations");
+			if (al_get_config_value(animCfg,section.c_str(),"durations") == NULL)
+			{
+				intString = al_get_config_value(animCfg,section.c_str(),"duration");
+			}
+			else
+			{
+				intString = al_get_config_value(animCfg,section.c_str(),"durations");
+			}
 			std::vector<int> lenTokens = strToki(intString,',');
 			intString = al_get_config_value(animCfg,section.c_str(),"box0x");
 			std::vector<int> box0xTokens = strToki(intString,',');
