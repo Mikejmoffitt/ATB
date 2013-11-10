@@ -451,7 +451,9 @@ void Player::handleInputs()
 	{
 		if (direction)
 		{
-			if(downBack > 0)
+			backDP = LENIENCY;
+
+			if(downBackQC > 0)
 			{
 				if ((*inputs)[DOWNKEY] > 0){}
 				else
@@ -463,7 +465,8 @@ void Player::handleInputs()
 		}
 		else
 		{
-			if(downForward >0)
+			forwardDP = LENIENCY;
+			if(downForwardQC >0)
 			{
 				if ((*inputs)[DOWNKEY] > 0){}
 				else
@@ -472,14 +475,37 @@ void Player::handleInputs()
 					std::cout << "QCf!!!" << std::endl;
 				}
 			}
+		}
+
+
+		if ((*inputs)[DOWNKEY] > 0)
+		{
+			if(downBDP > 0)
+					if(!direction)
+					{
+						bdp = LENIENCY;
+						std::cout<<"Back Dragon Punch!"<<std::endl;
+					}
+				if(downDP > 0)
+					if(direction)
+					{
+						fdp = LENIENCY;
+						std::cout<<"Dragon Punch!"<<std::endl;
+					}
+			if(downQC > 0)
+				if(direction)
+					downBackQC = LENIENCY;
+				else
+					downForwardQC = LENIENCY;
 		}
 	}
 	else if ((*inputs)[RIGHTKEY] > 0)
 	{
-			
+		backDP = LENIENCY;
+
 		if (!direction)
 		{
-			if(downBack > 0)
+			if(downBackQC > 0)
 			{
 				if ((*inputs)[DOWNKEY] > 0){}
 				else
@@ -491,7 +517,8 @@ void Player::handleInputs()
 		}
 		else
 		{
-			if(downForward >0)
+			forwardDP = LENIENCY;
+			if(downForwardQC >0)
 			{
 				if ((*inputs)[DOWNKEY] > 0){}
 				else
@@ -501,32 +528,38 @@ void Player::handleInputs()
 				}
 			}
 		}
-	}
-	else
-	{
 		if ((*inputs)[DOWNKEY] > 0)
-			down = LENIENCY;
+		{
+				if(downBDP > 0)
+					if(direction)
+					{
+						bdp = LENIENCY;
+						std::cout<<"Back Dragon Punch!"<<std::endl;
+					}
+				if(downDP > 0)
+					if(!direction)
+					{
+						fdp = LENIENCY;
+						std::cout<<"Dragon Punch!"<<std::endl;
+					}
+				if(downQC > 0)
+					if(!direction)
+						downBackQC = LENIENCY;
+					else
+						downForwardQC = LENIENCY;
+		}
 	}
-	if ((*inputs)[DOWNKEY] > 0)
+	else if ((*inputs)[DOWNKEY] > 0)		
 	{
-		if ((*inputs)[RIGHTKEY] > 0)
-		{
-			if(down > 0)
-				if(!direction)
-					downBack = LENIENCY;
-				else
-					downForward = LENIENCY;
-		}
-		else if((*inputs)[LEFTKEY] > 0)
-		{
-			if(down > 0)
-				if(direction)
-					downBack = LENIENCY;
-				else
-					downForward = LENIENCY;
-		}
-			
+		downQC = LENIENCY;
+		if(backDP > 0)
+			downBDP = LENIENCY;
+		if(forwardDP > 0)
+			downDP = LENIENCY;
 	}
+		
+			
+	
 
 	if (inputOk && !crouching)
 	{
@@ -608,16 +641,26 @@ void Player::handleInputs()
 		}
 		landDelay = landDelayMax;
 	}
-	if(down > 0)
-		down--;
-	if(downForward > 0)
-		downForward--;
-	if(forward > 0)
-		forward--;
-	if(downBack>0)
-		downBack--;
-	if(back > 0)
-		back--;
+	if(downQC > 0)
+		downQC--;
+	if(downForwardQC > 0)
+		downForwardQC--;
+	if(forwardQC > 0)
+		forwardQC--;
+	if(downBackQC>0)
+		downBackQC--;
+	if(backQC > 0)
+		backQC--;
+	if(forwardDP > 0)
+		forwardDP--;
+	if(downDP > 0)
+		downDP--;
+	if(fdp > 0)
+		fdp--;
+	if(bdp > 0)
+		bdp--;
+	if(backDP > 0)
+		backDP--;
 }
 
 void Player::doPhysics()
