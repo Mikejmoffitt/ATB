@@ -185,7 +185,7 @@ int main(int argc, char **argv)
 	*/
 
 	Player1 = new Player("cfort",false);
-	Player2 = new Player("cfort",true);
+	Player2 = new Player("mspaint",true);
 
 	Player1->other = Player2;
 	Player2->other = Player1;
