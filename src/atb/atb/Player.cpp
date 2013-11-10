@@ -522,6 +522,12 @@ void Player::getHit()
 					std::cout << "Launched! " << std::endl;
 					vecY = other->a_knockBackVecY[other->attack_input][other->attack_button][other->attack_locus];
 					hitInAir = true;
+
+					if (yPos < GROUNDPOS)
+					{
+						hitInAir = true;
+					}
+
 					if (grounded)
 					{
 						hitInAir = true;
@@ -943,7 +949,7 @@ else if((*inputs)[DOWNKEY] > 0) //Just pressing down
 	}
 
 	// Process actual attack inputs here
-	if (inputOk)
+	if (inputOk || (!grounded && !knockDown && hitStun == 0 && doingNormal == 0 && doingSpecial == 0))
 	{
 		if ((*inputs)[4] == 1 || (*inputs)[5] == 1)
 		{
@@ -1027,10 +1033,10 @@ else if((*inputs)[DOWNKEY] > 0) //Just pressing down
 			}
 			else
 			{
-				neutralJump = crouching?L_AIR:L_AIRMOVING;
+				atkLocus = neutralJump?L_AIR:L_AIRMOVING;
 			}
 			// short-circuit specials
-			if (atkInput != I_N || atkInput != I_F || atkInput != I_B)
+			if (atkInput != I_N && atkInput != I_F && atkInput != I_B)
 			{
 				if (atkLocus == L_CROUCH)
 				{
@@ -1051,13 +1057,45 @@ void Player::doAttack(int atkInput, int atkButton, int atkLocus)
 	attack_button = atkButton;
 	attack_locus = atkLocus;
 	attack_input = atkInput;
-	int animNum = a_animNum[atkInput][atkButton][atkLocus];
-	if (a_enabled[atkInput][atkButton][atkLocus])
+	if (attack_input == I_F)
 	{
-		std::cout << "doing attack " << atkInput << " , " << atkButton << " , " << atkLocus << " anim " << animNum << std::endl;
+		if(!a_enabled[attack_input][attack_button][attack_locus])
+		{
+			std::cout << "No forward" << std::endl;
+			attack_input = I_N;
+		}
+	}
+	if (attack_input == I_B)
+	{
+		if(!a_enabled[attack_input][attack_button][attack_locus])
+		{
+			std::cout << "No back" << std::endl;
+			attack_input = I_N;
+		}
+	}
+
+	if (attack_locus == L_AIRMOVING)
+	{
+		if(!a_enabled[attack_input][attack_button][attack_locus])
+		{
+			std::cout << "No moving in air, doing neutral." << std::endl;
+			attack_locus = L_AIR;
+		}
+	}
+
+
+	std::cout << "Trying " <<  attack_input << " , " << attack_button << " , " << attack_locus << std::endl;
+
+	if (a_enabled[attack_input][attack_button][attack_locus])
+	{
+		int animNum = a_animNum[attack_input][attack_button][attack_locus];
+		std::cout << "doing attack " << attack_input << " , " << attack_button << " , " << attack_locus << " anim " << animNum << std::endl;
 		sprite->playAnimation(animNum);
-		vecX = 0;
-		if (atkInput == I_N || atkInput == I_F || atkInput == I_B)
+		if (grounded)
+		{
+			vecX = a_vecX[attack_input][attack_button][attack_locus][0];
+		}
+		if (attack_input == I_N || attack_input == I_F || attack_input == I_B)
 		{
 			doingNormal = sprite->numFrames(animNum);
 		}
