@@ -84,6 +84,9 @@ int main(int argc, char **argv)
 	int p2SelChar = 0;
 
 	//Character Select Loop
+	/*
+	
+	
 	while ((Player1 == NULL || Player2 == NULL))
 	{
 		barge->poll();
@@ -178,6 +181,12 @@ int main(int argc, char **argv)
 			0,0,baseX,baseY,0,0,windowX,windowY,0);
 		al_flip_display();
 	}
+
+	*/
+
+	Player1 = new Player("cfort",false);
+	Player2 = new Player("cfort",true);
+
 	Player1->other = Player2;
 	Player2->other = Player1;
 	Player1->barge = barge;
@@ -192,9 +201,20 @@ int main(int argc, char **argv)
 	al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_LOOP,0);
 	//Game Start loop
 	int scroll = 0;
+
+	bool showBoxes = false;
+
 	while(rounds1 < numRounds && rounds2 < numRounds)
 	{
 		barge->poll();
+
+		if (barge->p1keys[STARTKEY] == 1)
+		{
+			showBoxes ^= showBoxes;
+		}
+
+
+
 		al_set_target_bitmap(mainBuffer);
 		barge->draw(background, scroll * -1,0,false,false);
 		scroll = (Player1->xPos + Player2->xPos)/2 - (SCREENWIDTH/2);
@@ -221,8 +241,12 @@ int main(int argc, char **argv)
 		}
 		Player2->blit(scroll);
 		Player1->blit(scroll);
-		//Player2->boxBlit(scroll);
-		//Player1->boxBlit(scroll);
+
+		if (showBoxes)
+		{
+			Player2->boxBlit(scroll);
+			Player1->boxBlit(scroll);
+		}
 
 		
 		al_set_target_backbuffer(display);

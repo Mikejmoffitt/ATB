@@ -7,6 +7,8 @@
 #include "allegro5\allegro5.h"
 #include "allegro5\allegro_primitives.h"
 #include "allegro5\allegro_image.h"
+#include "allegro5\allegro_audio.h"
+#include "allegro5\allegro_acodec.h"
 
 #include "dirDefs.h"
 #include "Sprite.h"
@@ -54,6 +56,10 @@
 class Player
 {
 public:
+
+	ALLEGRO_SAMPLE* punchSnd;
+	ALLEGRO_SAMPLE* blockSnd;
+
 	Sprite* sprite;
 	Barge* barge;
 	Player* other;

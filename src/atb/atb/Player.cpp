@@ -97,7 +97,8 @@ std::vector<double> Player::strTokd(std::string s, char delim)
 
 Player::Player(std::string playerName, bool isP2)
 {
-
+	punchSnd = al_load_sample("data/hitsound/PunchHeavy.wav");
+	blockSnd = al_load_sample("data/hitsound/block.ogg");
 	name = playerName;
 	sprite = new Sprite(name);
 	isPlayer2 = isP2;
@@ -278,19 +279,19 @@ Player::Player(std::string playerName, bool isP2)
 
 						for (unsigned int i = 0; i < dstuff.size(); i++)
 						{
-							//a_vecY[l_input][l_button][l_locus].push_back(dstuff[i]);
+							a_vecY[l_input][l_button][l_locus].push_back(dstuff[i]);
 						}
 						dstuff = strTokd(
 							al_get_config_value(metaCfg,ss.str().c_str(),"dVecX"),',');
 						for (unsigned int i = 0; i < dstuff.size(); i++)
 						{
-							//a_dVecX[l_input][l_button][l_locus].push_back(dstuff[i]);
+							a_dVecX[l_input][l_button][l_locus].push_back(dstuff[i]);
 						}
 						dstuff = strTokd(
 							al_get_config_value(metaCfg,ss.str().c_str(),"dVecY"),',');
 						for (unsigned int i = 0; i < dstuff.size(); i++)
 						{
-							//a_dVecY[l_input][l_button][l_locus].push_back(dstuff[i]);
+							a_dVecY[l_input][l_button][l_locus].push_back(dstuff[i]);
 						}
 						if (al_get_config_value(metaCfg,ss.str().c_str(),"projectile") != NULL)
 						{
@@ -389,6 +390,8 @@ Player::Player(std::string playerName, bool isP2)
 Player::~Player()
 {
 	delete sprite;
+	al_destroy_sample(punchSnd);
+	al_destroy_sample(blockSnd);
 }
 
 void Player::getHit()
@@ -407,6 +410,7 @@ void Player::getHit()
 
 		if (hit && !knockDown && standDelay == 0)
 		{
+			al_play_sample(punchSnd,1,0,0.8,ALLEGRO_PLAYMODE_ONCE,0);
 			other->didHit = true;
 			bool doBlock = false;
 			// Determine if it is a block
@@ -500,6 +504,7 @@ void Player::getHit()
 			}
 			if (doBlock)
 			{
+				al_play_sample(blockSnd,1,0,1,ALLEGRO_PLAYMODE_ONCE,0);
 				std::cout << "Block!" << std::endl;
 				blockStun = other->a_hitStun[other->attack_input][other->attack_button][other->attack_locus];
 				hitStun = 0;
@@ -1114,7 +1119,13 @@ void Player::doAttack(int atkInput, int atkButton, int atkLocus)
 		sprite->playAnimation(animNum);
 		if (grounded)
 		{
-			vecX = a_vecX[attack_input][attack_button][attack_locus][0];
+			vecX = (direction?1:-1) * a_vecX[attack_input][attack_button][attack_locus][0];
+			vecY = a_vecY[attack_input][attack_button][attack_locus][0];
+			if (vecY < 0)
+			{
+				grounded = false;
+				yPos--;
+			}
 		}
 		if (attack_input == I_N || attack_input == I_F || attack_input == I_B)
 		{
