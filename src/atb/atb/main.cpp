@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 		timer++;
 		//Needs to be handled by actual character select eventually
 		Player1 = new Player("cfort",false); //Pretend Players selected a character
-		Player2 = new Player("cfort",true);
+		Player2 = new Player("mspaint",true);
 		Player1->other = Player2;
 		Player2->other = Player1;
 		Player1->barge = barge;
