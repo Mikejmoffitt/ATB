@@ -4,11 +4,9 @@
 #define DOWNKEY 1
 #define LEFTKEY 2
 #define RIGHTKEY 3
-#define LPKEY 4
-#define HPKEY 5
-#define LKKEY 6
-#define HKKEY 7
-#define STARTKEY 8
-#define SELKEY 9
+#define AKEY 4
+#define BKEY 5
+#define STARTKEY 6
+#define SELKEY 7
 
 #define PLAYER_NUMBER_OF_KEYS 10

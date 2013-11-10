@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 					p1SelChar++;
 				}
 			}
-			if((*p1Input)[UPKEY] == 1)
+			if((*p1Input)[AKEY] == 1)
 			{
 				Player1 = new Player(characters[0],false);
 			}
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
 					p2SelChar++;
 				}
 			}
-			if((*p2Input)[UPKEY] == 1)
+			if((*p2Input)[AKEY] == 1)
 			{
 				Player2 = new Player(characters[0],true);
 			}
