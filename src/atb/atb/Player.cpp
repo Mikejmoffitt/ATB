@@ -204,13 +204,10 @@ Player::Player(std::string playerName, bool isP2)
 				case L_CROUCH:
 					locusVar = "crouch";
 					break;
-				case L_SPECIAL:
-					locusVar = "special";
-					break;
 				}
-
+				ss.str("");
 				ss << inputVar << buttonVar << locusVar;
-
+				
 				if (al_get_config_value(metaCfg,ss.str().c_str(),"enabled") != NULL)
 				{
 					a_enabled[l_input][l_button][l_locus] = atoi(
@@ -218,12 +215,14 @@ Player::Player(std::string playerName, bool isP2)
 
 					if (a_enabled[l_input][l_button][l_locus])
 					{
+						std::cout << "enabled for " << ss.str() << std::endl;
 						a_whiffSnd[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"whiffSnd"));
 						a_hitSnd[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"hitSnd"));
 						a_animNum[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"animNum"));
+						std::cout << "Animation number " << a_animNum[l_input][l_button][l_locus] << std::endl;
 						a_damage[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"damage"));
 						a_chipDamage[l_input][l_button][l_locus] = atoi(
@@ -262,8 +261,10 @@ Player::Player(std::string playerName, bool isP2)
 
 						a_knockBackVecX[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"knockBackVecX"));
+						std::cout << "knockBackVecX: " << a_knockBackVecX[l_input][l_button][l_locus] << std::endl;
 						a_knockBackVecY[l_input][l_button][l_locus] = atoi(
 							al_get_config_value(metaCfg,ss.str().c_str(),"knockBackVecY"));
+						std::cout << "knockBackVecY: " << a_knockBackVecY[l_input][l_button][l_locus] << std::endl;
 				
 						std::vector<double> dstuff = strTokd(
 							al_get_config_value(metaCfg,ss.str().c_str(),"vecX"),',');
@@ -348,6 +349,28 @@ Player::Player(std::string playerName, bool isP2)
 	vecY = 0;
 	slideX = 0;
 
+	
+	downQC = 0;
+	downForwardQC = 0;
+	qcf = 0;
+	downBackQC = 0;
+	qcb = 0;
+	forwardDP = 0;
+	downDP = 0;
+	fdp = 0;
+	backDP = 0;
+	downBDP = 0;
+	bdp = 0;
+
+	forwardDP = 0;
+	downDP = 0;
+	downBDP = 0;
+	backDP = 0;
+
+	attack_input = 0;
+	attack_button = 0;
+	attack_locus = 0;
+
 	doingNormal = 0;
 	doingSpecial = 0;
 	jumpDelay = 0;
@@ -357,6 +380,9 @@ Player::Player(std::string playerName, bool isP2)
 	blockStun = 0;
 	standDelay = 0;
 	knockDown = false;
+	neutralJump = false;
+
+	hitInAir = false;
 }
 
 Player::~Player()
@@ -366,7 +392,178 @@ Player::~Player()
 
 void Player::getHit()
 {
+	bool hit = false;
+	if (other->didHit == false)
+	{
+		for (int i = 1; i < 4; i++)
+		{
+			// check for the 3 vulns vs an attack box
+			if (checkBox(i, 4))
+			{
+				hit = true;
+			}
+		}
 
+		if (hit && !knockDown && standDelay == 0)
+		{
+			other->didHit = true;
+			bool doBlock = false;
+			// Determine if it is a block
+			if (hitStun == 0 && grounded && (doingNormal == 0) && (doingSpecial == 0))
+			{
+				int hitType = other->a_hitType[other->attack_input][other->attack_button][other->attack_locus];
+				jumpDelay = 0;
+				landDelay = 0;
+				if (isPlayer2)
+				{
+					if (direction)
+					{
+						if (barge->p2keys[LEFTKEY] && !barge->p2keys[DOWNKEY])
+						{
+							// Go into a block
+							if (hitType != HIT_LOW)
+							{
+								doBlock = true;
+							}
+						}
+						if (barge->p2keys[LEFTKEY] && barge->p2keys[DOWNKEY])
+						{
+							// Go into a block
+							if (hitType != HIT_HI)
+							{
+								doBlock = true;
+							}
+						}
+					}
+					else
+					{
+						if (barge->p2keys[RIGHTKEY] && !barge->p2keys[DOWNKEY])
+						{
+							// Go into a block
+							if (hitType != HIT_LOW)
+							{
+								doBlock = true;
+							}
+						}
+						if (barge->p2keys[RIGHTKEY] && barge->p2keys[DOWNKEY])
+						{
+							// Go into a block
+							if (hitType != HIT_HI)
+							{
+								doBlock = true;
+							}
+						}
+					}
+				}
+				else
+				{
+					if (direction)
+					{
+						if (barge->p1keys[LEFTKEY] && !barge->p1keys[DOWNKEY])
+						{
+							// Go into a block
+							if (hitType != HIT_LOW)
+							{
+								doBlock = true;
+							}
+						}
+						if (barge->p1keys[LEFTKEY] && barge->p1keys[DOWNKEY])
+						{
+							// Go into a block
+							if (hitType != HIT_HI)
+							{
+								doBlock = true;
+							}
+						}
+					}
+					else
+					{
+						if (barge->p1keys[RIGHTKEY] && !barge->p1keys[DOWNKEY])
+						{
+							// Go into a block
+							if (hitType != HIT_LOW)
+							{
+								doBlock = true;
+							}
+						}
+						if (barge->p1keys[RIGHTKEY] && barge->p1keys[DOWNKEY])
+						{
+							// Go into a block
+							if (hitType != HIT_HI)
+							{
+								doBlock = true;
+							}
+						}
+					}
+				}
+			}
+			if (doBlock)
+			{
+				std::cout << "Block!" << std::endl;
+				blockStun = other->a_hitStun[other->attack_input][other->attack_button][other->attack_locus];
+				hitStun = 0;
+				hitfreeze = other->a_freeze[other->attack_input][other->attack_button][other->attack_locus] / 2;
+				knockDown = false;
+			}
+			else
+			{
+				std::cout << "Hit! " ;
+				blockStun = 0;
+				hitStun = other->a_hitStun[other->attack_input][other->attack_button][other->attack_locus];
+				hitfreeze = other->a_freeze[other->attack_input][other->attack_button][other->attack_locus];
+				knockDown = other->a_knockDown[other->attack_input][other->attack_button][other->attack_locus];
+				if (knockDown)
+				{
+					standDelay = STAND_MAX;
+					std::cout << "It's a knockdown! ";
+				}
+				if (knockDown || !grounded)
+				{
+					std::cout << "Launched! " << std::endl;
+					vecY = other->a_knockBackVecY[other->attack_input][other->attack_button][other->attack_locus];
+					hitInAir = true;
+					if (grounded)
+					{
+						hitInAir = true;
+						yPos--;
+						grounded = false;
+					}
+				}
+				else
+				{
+					vecY = 0;
+				}
+			}
+			doingNormal = 0;
+			doingSpecial = 0;
+			vecX = 0;
+			if (yPos >= GROUNDPOS)
+			{
+				if (direction)
+				{
+					slideX = -1 * other->a_knockBackVecX[other->attack_input][other->attack_button][other->attack_locus] / 2;
+				}
+				else
+				{
+					slideX = other->a_knockBackVecX[other->attack_input][other->attack_button][other->attack_locus] / 2;
+				}
+			}
+			else
+			{
+				if (direction)
+				{
+					vecX = -1 * other->a_knockBackVecX[other->attack_input][other->attack_button][other->attack_locus] / 2;
+					slideX = 0;
+				}
+				else
+				{
+					vecX = other->a_knockBackVecX[other->attack_input][other->attack_button][other->attack_locus] / 2;
+					slideX = 0;
+				}
+			}
+			health = health - a_damage[other->attack_input][other->attack_button][other->attack_locus];
+		}
+	}
 }
 
 void Player::handleInputs()
@@ -374,7 +571,7 @@ void Player::handleInputs()
 	// Check for walking around inputs (not attack buttons)
 	bool inputOk = true;
 	
-	typedef int Keys[10];
+	typedef int Keys[8];
 	Keys* inputs = isPlayer2? &(barge->p2keys) : &(barge->p1keys);
 	if (hitStun > 0 || blockStun > 0)
 	{
@@ -384,12 +581,41 @@ void Player::handleInputs()
 	{
 		inputOk = false;
 	}
+	else if (standDelay > 0)
+	{
+		inputOk = false;
+	}
 	else if (doingNormal > 0 || doingSpecial > 0)
 	{
 		inputOk = false;
 	}
+
+	if (standDelay > 0 && grounded)
+	{
+		vecX = 0;
+		slideX = 0;
+		standDelay--;
+		if (standDelay > sprite->numFrames(stdAnimIndexes[GETUPANIM]))
+		{
+			sprite->playAnimation(stdAnimIndexes[DOWNANIM]);
+		}
+		else
+		{
+			sprite->playAnimation(stdAnimIndexes[GETUPANIM]);
+		}
+	}
+
+	if (doingNormal > 0)
+	{
+		doingNormal--;
+	}
+	if (doingSpecial > 0)
+	{
+		doingNormal--;
+	}
 	if (grounded)
 	{
+		hitInAir = false;
 		if (jumpDelay > 0)
 		{
 			sprite->playAnimation(stdAnimIndexes[PREJUMPANIM]);
@@ -409,16 +635,9 @@ void Player::handleInputs()
 		}
 		if (inputOk)
 		{
+			didHit = false;
 			// Face the other player when grounded
 			// not in the middle of an anim, though
-			if (xPos < other->xPos)
-			{
-				direction = true;
-			}
-			if (xPos > other->xPos)
-			{
-				direction = false;
-			}
 		}
 	}
 	else
@@ -444,122 +663,163 @@ void Player::handleInputs()
 		}
 	}
 
-
-	//Same thing as next big if except without crouching and inputokay
-	//For detecting qcf qcb
-	if ((*inputs)[LEFTKEY] > 0)
-	{
-		if (direction)
-		{
-			backDP = LENIENCY;
-
-			if(downBackQC > 0)
-			{
-				if ((*inputs)[DOWNKEY] > 0){}
-				else
-				{
-					qcb = LENIENCY;
-					std::cout << "QCB!!!" << std::endl;
-				}
-			}							 
-		}
-		else
-		{
-			forwardDP = LENIENCY;
-			if(downForwardQC >0)
-			{
-				if ((*inputs)[DOWNKEY] > 0){}
-				else
-				{
-					qcf = LENIENCY;
-					std::cout << "QCf!!!" << std::endl;
-				}
-			}
-		}
-
-
-		if ((*inputs)[DOWNKEY] > 0)
-		{
-			if(downBDP > 0)
-					if(!direction)
-					{
-						bdp = LENIENCY;
-						std::cout<<"Back Dragon Punch!"<<std::endl;
-					}
-				if(downDP > 0)
-					if(direction)
-					{
-						fdp = LENIENCY;
-						std::cout<<"Dragon Punch!"<<std::endl;
-					}
-			if(downQC > 0)
-				if(direction)
-					downBackQC = LENIENCY;
-				else
-					downForwardQC = LENIENCY;
-		}
-	}
-	else if ((*inputs)[RIGHTKEY] > 0)
-	{
-		backDP = LENIENCY;
-
-		if (!direction)
-		{
-			if(downBackQC > 0)
-			{
-				if ((*inputs)[DOWNKEY] > 0){}
-				else
-				{
-					qcb = LENIENCY;
-					std::cout << "QCB!!!" << std::endl;
-				}
-			}							 
-		}
-		else
-		{
-			forwardDP = LENIENCY;
-			if(downForwardQC >0)
-			{
-				if ((*inputs)[DOWNKEY] > 0){}
-				else
-				{
-					qcf = LENIENCY;
-					std::cout << "QCf!!!" << std::endl;
-				}
-			}
-		}
-		if ((*inputs)[DOWNKEY] > 0)
-		{
-				if(downBDP > 0)
-					if(direction)
-					{
-						bdp = LENIENCY;
-						std::cout<<"Back Dragon Punch!"<<std::endl;
-					}
-				if(downDP > 0)
-					if(!direction)
-					{
-						fdp = LENIENCY;
-						std::cout<<"Dragon Punch!"<<std::endl;
-					}
-				if(downQC > 0)
-					if(!direction)
-						downBackQC = LENIENCY;
-					else
-						downForwardQC = LENIENCY;
-		}
-	}
-	else if ((*inputs)[DOWNKEY] > 0)		
-	{
-		downQC = LENIENCY;
-		if(backDP > 0)
-			downBDP = LENIENCY;
-		if(forwardDP > 0)
-			downDP = LENIENCY;
-	}
-		
-			
 	
+	if (xPos < other->xPos)
+	{
+		direction = true;
+	}
+	if (xPos > other->xPos)
+	{
+		direction = false;
+	}
+
+	if (blockStun > 0)
+	{
+		blockStun--;
+		knockDown = 0;
+	}
+	if (grounded)
+	{
+		if (hitStun > 0)
+		{
+			hitStun--;
+		}
+		if (hitStun == 0)
+		{
+			knockDown = 0;
+		}
+	}
+	if (!grounded)
+	{
+		if (hitStun > 1)
+		{
+			hitStun--;
+		}
+	}
+
+	/////////////////
+	//For detecting qcf qcb DP
+if ((*inputs)[LEFTKEY] > 0)
+{
+	if(direction)//Pressing left is back
+	{
+		if((*inputs)[DOWNKEY] > 0)//Down left - down back
+		{
+			//backwards dragon punch complete
+			if(downBDP > 0)
+			{
+				bdp = LENIENCY;
+				std::cout<<"Back Dragon Punch"<<std::endl;
+			}
+			//qcb part 2
+			if(downQC > 0)
+				downBackQC = LENIENCY;
+		}
+		else //just pressing back
+		{
+			//QCB Complete
+			if(downBackQC > 0)
+			{
+				qcb = LENIENCY;
+				std::cout<<"Quarter Circle Back"<<std::endl;
+			}
+			backDP = LENIENCY;
+		}
+	}
+	else //Pressing Left is forward
+	{
+		if((*inputs)[DOWNKEY] > 0)//Down left - down forward
+		{
+			//Dragon Punch Complete
+			if(downDP > 0)
+			{
+				fdp = LENIENCY;
+				std::cout<<"Forward Dragon Punch"<<std::endl;
+			}
+			//QCF pt 2/3
+			if(downQC > 0)
+				downForwardQC  = LENIENCY;
+		}
+		else //just pressing forward
+		{
+			//QCF Complete
+			if(downForwardQC > 0)
+			{
+				qcf = LENIENCY;
+				std::cout<<"Quarter Circle Forward"<<std::endl;
+			}
+			forwardDP = LENIENCY;
+		}
+	}
+}
+else if((*inputs)[RIGHTKEY] > 0)
+{
+	if(!direction)//Pressing right is back
+	{
+		if((*inputs)[DOWNKEY] > 0)//Down right - down back
+		{
+			//backwards dragon punch complete
+			if(downBDP > 0)
+			{
+				bdp = LENIENCY;
+				std::cout<<"Back Dragon Punch"<<std::endl;
+			}
+			//qcb part 2
+			if(downQC > 0)
+				downBackQC = LENIENCY;
+		}
+		else //just pressing back
+		{
+			//QCB Complete
+			if(downBackQC > 0)
+			{
+				qcb = LENIENCY;
+				std::cout<<"Quarter Circle Back"<<std::endl;
+			}
+			backDP = LENIENCY;
+		}
+	}
+	else //Pressing right is forward
+	{
+		if((*inputs)[DOWNKEY] > 0)//Down right - down forward
+		{
+			//Dragon Punch Complete
+			if(downDP > 0)
+			{
+				fdp = LENIENCY;
+				std::cout<<"Forward Dragon Punch"<<std::endl;
+			}
+			//QCF pt 2/3
+			if(downQC > 0)
+				downForwardQC  = LENIENCY;
+		}
+		else //just pressing forward
+		{
+			//QCF Complete
+			if(downForwardQC > 0)
+			{
+				qcf = LENIENCY;
+				std::cout<<"Quarter Circle Forward"<<std::endl;
+			}
+			forwardDP = LENIENCY;
+		}
+	}
+}
+else if((*inputs)[DOWNKEY] > 0) //Just pressing down
+{
+	//QCF and QCB pt1
+	downQC = LENIENCY;
+	//FDP pt2
+	if(forwardDP > 0)
+		downDP = LENIENCY;
+	//BDP pt2
+	if(backDP > 0)
+		downBDP = LENIENCY;
+}
+
+
+
+	/////////////////
 
 	if (inputOk && !crouching)
 	{
@@ -628,16 +888,19 @@ void Player::handleInputs()
 		{
 			sprite->playAnimation(direction?stdAnimIndexes[JUMPBACKANIM]:stdAnimIndexes[JUMPFWDANIM]);
 			vecX = direction?(backJumpSpeed * -1):(fwdJumpSpeed * -1);
+			neutralJump = false;
 		}
 		else if ((*inputs)[RIGHTKEY] > 0)
 		{
 			sprite->playAnimation(direction?stdAnimIndexes[JUMPFWDANIM]:stdAnimIndexes[JUMPBACKANIM]);
 			vecX = direction?(fwdJumpSpeed):(backJumpSpeed);
+			neutralJump = false;
 		}
 		else
 		{
 			sprite->playAnimation(stdAnimIndexes[JUMPANIM]);
 			vecX = 0;
+			neutralJump = true;
 		}
 		landDelay = landDelayMax;
 	}
@@ -645,8 +908,6 @@ void Player::handleInputs()
 		downQC--;
 	if(downForwardQC > 0)
 		downForwardQC--;
-	if(forwardQC > 0)
-		forwardQC--;
 	if(downBackQC>0)
 		downBackQC--;
 	if(backQC > 0)
@@ -655,12 +916,156 @@ void Player::handleInputs()
 		forwardDP--;
 	if(downDP > 0)
 		downDP--;
+	if(downBDP > 0)
+		downBDP--;
 	if(fdp > 0)
 		fdp--;
 	if(bdp > 0)
 		bdp--;
 	if(backDP > 0)
 		backDP--;
+
+	if (qcb > 0)
+	{
+		qcb--;
+	}
+	if (qcf > 0)
+	{
+		qcf--;
+	}
+	if (fdp > 0)
+	{
+		fdp--;
+	}
+	if (bdp > 0)
+	{
+		bdp--;
+	}
+
+	// Process actual attack inputs here
+	if (inputOk)
+	{
+		if ((*inputs)[4] == 1 || (*inputs)[5] == 1)
+		{
+			int atkInput;
+			int atkButton;
+			int atkLocus;
+
+			// Figure out buttons
+			if ((*inputs)[5] == 1)
+			{
+				atkButton = 1;
+			}
+			else
+			{
+				atkButton = 0;
+			}
+
+			// Figure out input
+			if (qcf > 0)
+			{
+				atkInput = I_QCF;
+			}
+			else if (qcb > 0)
+			{
+				atkInput = I_QCB;
+			}
+			else if (fdp > 0)
+			{
+				atkInput = I_FDP;
+			}
+			else if (bdp > 0)
+			{
+				atkInput = I_BDP;
+			}
+			else if (fcharge > 0)
+			{
+				atkInput = I_FCHARGE;
+			}
+			else if (bcharge > 0)
+			{
+				atkInput = I_BCHARGE;
+			}
+			else
+			{
+				if (direction)
+				{
+					if ((*inputs)[LEFTKEY] > 0)
+					{
+						atkInput = I_B;
+					}
+					else if ((*inputs)[RIGHTKEY] > 0)
+					{
+						atkInput = I_F;
+					}
+					else
+					{
+						atkInput = I_N;
+					}
+				}
+				else
+				{
+					if ((*inputs)[RIGHTKEY] > 0)
+					{
+						atkInput = I_B;
+					}
+					else if ((*inputs)[LEFTKEY] > 0)
+					{
+						atkInput = I_F;
+					}
+					else
+					{
+						atkInput = I_N;
+					}
+				}
+			}
+
+			// Find locus
+			if (grounded)
+			{
+				atkLocus = crouching?L_CROUCH:L_GROUND;
+			}
+			else
+			{
+				neutralJump = crouching?L_AIR:L_AIRMOVING;
+			}
+			// short-circuit specials
+			if (atkInput != I_N || atkInput != I_F || atkInput != I_B)
+			{
+				if (atkLocus == L_CROUCH)
+				{
+					atkLocus = L_GROUND;
+				}
+				if (atkLocus == L_AIRMOVING)
+				{
+					atkLocus = L_AIR;
+				}
+			}
+			doAttack(atkInput,atkButton,atkLocus);
+		}
+	}
+}
+
+void Player::doAttack(int atkInput, int atkButton, int atkLocus)
+{
+	attack_button = atkButton;
+	attack_locus = atkLocus;
+	attack_input = atkInput;
+	int animNum = a_animNum[atkInput][atkButton][atkLocus];
+	if (a_enabled[atkInput][atkButton][atkLocus])
+	{
+		std::cout << "doing attack " << atkInput << " , " << atkButton << " , " << atkLocus << " anim " << animNum << std::endl;
+		sprite->playAnimation(animNum);
+		vecX = 0;
+		if (atkInput == I_N || atkInput == I_F || atkInput == I_B)
+		{
+			doingNormal = sprite->numFrames(animNum);
+		}
+		else
+		{
+			doingNormal = sprite->numFrames(animNum);
+		}
+	}
 }
 
 void Player::doPhysics()
@@ -673,6 +1078,26 @@ void Player::doPhysics()
 	else
 	{
 		yPos = yPos + vecY;
+	}
+	if (xPos > BOUNDS && xPos < STAGEWIDTH - BOUNDS)
+	{
+		xPos = xPos + slideX;
+	}
+	else
+	{
+		other->xPos = other->xPos - slideX;
+	}
+	if (slideX >= SLIDEFRICTION)
+	{
+		slideX -= SLIDEFRICTION;
+	}
+	else if (slideX <= SLIDEFRICTION * -1)
+	{
+		slideX += SLIDEFRICTION;
+	}
+	else
+	{
+		slideX = 0;
 	}
 
 	xPos = xPos + vecX;
@@ -779,7 +1204,7 @@ void Player::animate()
 
 void Player::blit(int scrollX)
 {
-	sprite->blit(floor(xPos) - (PLAYERWIDTH/2) - scrollX,yPos-(PLAYERHEIGHT),!direction,isPlayer2);
+	sprite->blit(floor(xPos) - (PLAYERWIDTH/2) - scrollX,yPos-(PLAYERHEIGHT),(xPos>other->xPos),isPlayer2);
 }
 
 void Player::boxBlit(int scrollX)
@@ -804,11 +1229,11 @@ bool Player::checkBox(int a, int b)
 	int x2;
 	if (other->direction)
 	{
-		x2 = other->xPos + (other->sprite->getBoxX(a));
+		x2 = other->xPos + (other->sprite->getBoxX(b));
 	}
 	else
 	{
-		x2 = other->xPos + (PLAYERWIDTH - other->sprite->getBoxX(a) - other->sprite->getBoxW(a));
+		x2 = other->xPos + (PLAYERWIDTH - other->sprite->getBoxX(b) - other->sprite->getBoxW(b));
 	}
 	int y2 = other->yPos + other->sprite->getBoxY(b);
 	int w2 = other->sprite->getBoxW(b);

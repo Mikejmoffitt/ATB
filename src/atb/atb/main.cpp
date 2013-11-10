@@ -52,7 +52,6 @@ int main(int argc, char **argv)
 	int timer = 0;
 	//Character Select song
 	ALLEGRO_SAMPLE* sample = al_load_sample("data/testmus.ogg");
-	al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_LOOP,0);
 
 	//Character Select Loop
 	while ((Player1 == NULL || Player2 == NULL) && timer<200)
@@ -68,7 +67,7 @@ int main(int argc, char **argv)
 		timer++;
 		//Needs to be handled by actual character select eventually
 		Player1 = new Player("cfort",false); //Pretend Players selected a character
-		Player2 = new Player("mspaint",true);
+		Player2 = new Player("cfort",true);
 		Player1->other = Player2;
 		Player2->other = Player1;
 		Player1->barge = barge;
@@ -79,8 +78,6 @@ int main(int argc, char **argv)
 	background = al_load_bitmap(sb.str().c_str());
 
 	//Play Stage Song
-	al_stop_samples();
-	sample = al_load_sample("data/testmus.ogg");
 	al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_LOOP,0);
 	//Game Start loop
 	int scroll = 0;
@@ -98,17 +95,23 @@ int main(int argc, char **argv)
 		{
 			scroll = 320;
 		}
-
-		Player1->handleInputs();
-		Player1->doPhysics();
-		Player1->animate();
-		Player1->blit(scroll);
-		Player1->boxBlit(scroll);
-		Player2->handleInputs();
-		Player2->doPhysics();
-		Player2->animate();
+		if (!Player1->freezeGame() && !Player2->freezeGame())
+		{
+			Player1->handleInputs();
+			Player2->handleInputs();
+			Player1->doPhysics();
+			Player2->doPhysics();
+			Player1->attackVectors();
+			Player2->attackVectors();
+			Player1->getHit();
+			Player2->getHit();
+			Player2->animate();
+			Player1->animate();
+		}
 		Player2->blit(scroll);
-		Player2->boxBlit(scroll);
+		Player1->blit(scroll);
+		//Player2->boxBlit(scroll);
+		//Player1->boxBlit(scroll);
 
 		
 		al_set_target_backbuffer(display);

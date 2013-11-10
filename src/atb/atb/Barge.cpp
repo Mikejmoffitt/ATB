@@ -47,36 +47,28 @@ Barge::Barge(std::string fname)
 	kbKeys1[1] = atoi(al_get_config_value(gameCfg,"keyboard","down1"));
 	kbKeys1[2] = atoi(al_get_config_value(gameCfg,"keyboard","left1"));
 	kbKeys1[3] = atoi(al_get_config_value(gameCfg,"keyboard","right1"));
-	kbKeys1[4] = atoi(al_get_config_value(gameCfg,"keyboard","lp1"));
-	kbKeys1[5] = atoi(al_get_config_value(gameCfg,"keyboard","hp1"));
-	kbKeys1[6] = atoi(al_get_config_value(gameCfg,"keyboard","lk1"));
-	kbKeys1[7] = atoi(al_get_config_value(gameCfg,"keyboard","hk1"));
-	kbKeys1[8] = atoi(al_get_config_value(gameCfg,"keyboard","start1"));
-	kbKeys1[9] = atoi(al_get_config_value(gameCfg,"keyboard","sel1"));
-	joyKeys1[0] = atoi(al_get_config_value(gameCfg,"joy","lp1"));
-	joyKeys1[1] = atoi(al_get_config_value(gameCfg,"joy","hp1"));
-	joyKeys1[2] = atoi(al_get_config_value(gameCfg,"joy","lk1"));
-	joyKeys1[3] = atoi(al_get_config_value(gameCfg,"joy","hk1"));
-	joyKeys1[4] = atoi(al_get_config_value(gameCfg,"joy","start1"));
-	joyKeys1[5] = atoi(al_get_config_value(gameCfg,"joy","sel1"));
+	kbKeys1[4] = atoi(al_get_config_value(gameCfg,"keyboard","a1"));
+	kbKeys1[5] = atoi(al_get_config_value(gameCfg,"keyboard","b1"));
+	kbKeys1[6] = atoi(al_get_config_value(gameCfg,"keyboard","start1"));
+	kbKeys1[7] = atoi(al_get_config_value(gameCfg,"keyboard","sel1"));
+	joyKeys1[0] = atoi(al_get_config_value(gameCfg,"joy","a1"));
+	joyKeys1[1] = atoi(al_get_config_value(gameCfg,"joy","b1"));
+	joyKeys1[2] = atoi(al_get_config_value(gameCfg,"joy","start1"));
+	joyKeys1[3] = atoi(al_get_config_value(gameCfg,"joy","sel1"));
 
 	
 	kbKeys2[0] = atoi(al_get_config_value(gameCfg,"keyboard","up2"));
 	kbKeys2[1] = atoi(al_get_config_value(gameCfg,"keyboard","down2"));
 	kbKeys2[2] = atoi(al_get_config_value(gameCfg,"keyboard","left2"));
 	kbKeys2[3] = atoi(al_get_config_value(gameCfg,"keyboard","right2"));
-	kbKeys2[4] = atoi(al_get_config_value(gameCfg,"keyboard","lp2"));
-	kbKeys2[5] = atoi(al_get_config_value(gameCfg,"keyboard","hp2"));
-	kbKeys2[6] = atoi(al_get_config_value(gameCfg,"keyboard","lk2"));
-	kbKeys2[7] = atoi(al_get_config_value(gameCfg,"keyboard","hk2"));
-	kbKeys2[8] = atoi(al_get_config_value(gameCfg,"keyboard","start2"));
-	kbKeys2[9] = atoi(al_get_config_value(gameCfg,"keyboard","sel2"));
-	joyKeys2[0] = atoi(al_get_config_value(gameCfg,"joy","lp2"));
-	joyKeys2[1] = atoi(al_get_config_value(gameCfg,"joy","hp2"));
-	joyKeys2[2] = atoi(al_get_config_value(gameCfg,"joy","lk2"));
-	joyKeys2[3] = atoi(al_get_config_value(gameCfg,"joy","hk2"));
-	joyKeys2[4] = atoi(al_get_config_value(gameCfg,"joy","start2"));
-	joyKeys2[5] = atoi(al_get_config_value(gameCfg,"joy","sel2"));
+	kbKeys2[4] = atoi(al_get_config_value(gameCfg,"keyboard","a2"));
+	kbKeys2[5] = atoi(al_get_config_value(gameCfg,"keyboard","b2"));
+	kbKeys2[6] = atoi(al_get_config_value(gameCfg,"keyboard","start2"));
+	kbKeys2[7] = atoi(al_get_config_value(gameCfg,"keyboard","sel2"));
+	joyKeys2[0] = atoi(al_get_config_value(gameCfg,"joy","a2"));
+	joyKeys2[1] = atoi(al_get_config_value(gameCfg,"joy","b2"));
+	joyKeys2[2] = atoi(al_get_config_value(gameCfg,"joy","start2"));
+	joyKeys2[3] = atoi(al_get_config_value(gameCfg,"joy","sel2"));
 
 	std::cout << "Done setting up controller." << std::endl;
 }
@@ -126,10 +118,8 @@ void Barge::poll()
 	bool joyLeft = false;
 	bool joyUp = false;
 	bool joyDown = false;
-	bool joyLp = false;
-	bool joyHp = false;
-	bool joyLk = false;
-	bool joyHk = false;
+	bool joyA = false;
+	bool joyB = false;
 	bool joyStart = false;
 	bool joySel = false;
 	
@@ -179,12 +169,10 @@ void Barge::poll()
 		{
 			joyDown = false;
 		
-			joyLp = joyState.button[joyKeys1[0]];
-			joyHp = joyState.button[joyKeys1[1]];
-			joyLk = joyState.button[joyKeys1[2]];
-			joyHk = joyState.button[joyKeys1[3]];
-			joyStart = joyState.button[joyKeys1[4]];
-			joySel = joyState.button[joyKeys1[4]];
+			joyA = joyState.button[joyKeys1[0]];
+			joyB = joyState.button[joyKeys1[1]];
+			joyStart = joyState.button[joyKeys1[2]];
+			joySel = joyState.button[joyKeys1[3]];
 		}
 	}
 	
@@ -220,7 +208,7 @@ void Barge::poll()
 	{
 		p1keys[3] = 0; // Right
 	}
-	if (al_key_down(&keyState, kbKeys1[4]) || joyLp)
+	if (al_key_down(&keyState, kbKeys1[4]) || joyA)
 	{
 		p1keys[4]++;
 	}
@@ -228,7 +216,7 @@ void Barge::poll()
 	{
 		p1keys[4] = 0; // A
 	}
-	if (al_key_down(&keyState, kbKeys1[5]) || joyHp)
+	if (al_key_down(&keyState, kbKeys1[5]) || joyB)
 	{
 		p1keys[5]++;
 	}
@@ -236,37 +224,21 @@ void Barge::poll()
 	{
 		p1keys[5] = 0; // B
 	}
-	if (al_key_down(&keyState, kbKeys1[6]) || joyLk)
+	if (al_key_down(&keyState, kbKeys1[6]) || joyStart)
 	{
 		p1keys[6]++;
 	}
 	else
 	{
-		p1keys[6] = 0; // C
+		p1keys[6] = 0; // Start
 	}
-	if (al_key_down(&keyState, kbKeys1[7]) || joyHk)
+	if (al_key_down(&keyState, kbKeys1[7]) || joySel)
 	{
 		p1keys[7]++;
 	}
 	else
 	{
-		p1keys[7] = 0; // D
-	}
-	if (al_key_down(&keyState, kbKeys1[8]) || joyStart)
-	{
-		p1keys[8]++;
-	}
-	else
-	{
-		p1keys[8] = 0; // Start
-	}
-	if (al_key_down(&keyState, kbKeys1[9]) || joySel)
-	{
-		p1keys[9]++;
-	}
-	else
-	{
-		p1keys[9] = 0; // Start
+		p1keys[7] = 0; // Start
 	}
 
 	
@@ -280,10 +252,8 @@ void Barge::poll()
 	joyLeft = false;
 	joyUp = false;
 	joyDown = false;
-	joyLp = false;
-	joyHp = false;
-	joyLk = false;
-	joyHk = false;
+	joyA = false;
+	joyB = false;
 	joyStart = false;
 	joySel = false;
 	
@@ -333,12 +303,10 @@ void Barge::poll()
 		{
 			joyDown = false;
 		
-			joyLp = joyState.button[joyKeys1[0]];
-			joyHp = joyState.button[joyKeys1[1]];
-			joyLk = joyState.button[joyKeys1[2]];
-			joyHk = joyState.button[joyKeys1[3]];
-			joyStart = joyState.button[joyKeys1[4]];
-			joySel = joyState.button[joyKeys1[4]];
+			joyA = joyState.button[joyKeys1[0]];
+			joyB = joyState.button[joyKeys1[1]];
+			joyStart = joyState.button[joyKeys1[2]];
+			joySel = joyState.button[joyKeys1[3]];
 		}
 	}
 	
@@ -374,7 +342,7 @@ void Barge::poll()
 	{
 		p2keys[3] = 0; // Right
 	}
-	if (al_key_down(&keyState, kbKeys2[4]) || joyLp)
+	if (al_key_down(&keyState, kbKeys2[4]) || joyA)
 	{
 		p2keys[4]++;
 	}
@@ -382,7 +350,7 @@ void Barge::poll()
 	{
 		p2keys[4] = 0; // A
 	}
-	if (al_key_down(&keyState, kbKeys2[5]) || joyHp)
+	if (al_key_down(&keyState, kbKeys2[5]) || joyB)
 	{
 		p2keys[5]++;
 	}
@@ -390,37 +358,21 @@ void Barge::poll()
 	{
 		p2keys[5] = 0; // B
 	}
-	if (al_key_down(&keyState, kbKeys2[6]) || joyLk)
+	if (al_key_down(&keyState, kbKeys2[6]) || joyStart)
 	{
 		p2keys[6]++;
 	}
 	else
 	{
-		p2keys[6] = 0; // C
+		p2keys[6] = 0; // Start
 	}
-	if (al_key_down(&keyState, kbKeys2[7]) || joyHk)
+	if (al_key_down(&keyState, kbKeys2[7]) || joySel)
 	{
 		p2keys[7]++;
 	}
 	else
 	{
-		p2keys[7] = 0; // D
-	}
-	if (al_key_down(&keyState, kbKeys2[8]) || joyStart)
-	{
-		p2keys[8]++;
-	}
-	else
-	{
-		p2keys[8] = 0; // Start
-	}
-	if (al_key_down(&keyState, kbKeys2[9]) || joySel)
-	{
-		p2keys[9]++;
-	}
-	else
-	{
-		p2keys[9] = 0; // Start
+		p2keys[7] = 0; // Start
 	}
 }
 
@@ -428,10 +380,8 @@ void Barge::poll()
 #define KB_DOWN1 ALLEGRO_KEY_DOWN
 #define KB_LEFT1 ALLEGRO_KEY_LEFT
 #define KB_RIGHT1 ALLEGRO_KEY_RIGHT
-#define KB_LP1 ALLEGRO_KEY_A
-#define KB_HP1 ALLEGRO_KEY_S
-#define KB_LK1 ALLEGRO_KEY_Z
-#define KB_HK1 ALLEGRO_KEY_X
+#define KB_A1 ALLEGRO_KEY_A
+#define KB_B1 ALLEGRO_KEY_S
 #define KB_START1 ALLEGRO_KEY_1
 #define KB_SEL1 ALLEGRO_KEY_5
 
@@ -439,26 +389,20 @@ void Barge::poll()
 #define KB_DOWN2 ALLEGRO_KEY_K
 #define KB_LEFT2 ALLEGRO_KEY_J
 #define KB_RIGHT2 ALLEGRO_KEY_L
-#define KB_LP2 ALLEGRO_KEY_T
-#define KB_HP2 ALLEGRO_KEY_Y
-#define KB_LK2 ALLEGRO_KEY_G
-#define KB_HK2 ALLEGRO_KEY_H
+#define KB_A2 ALLEGRO_KEY_T
+#define KB_B2 ALLEGRO_KEY_Y
 #define KB_START2 ALLEGRO_KEY_2
 #define KB_SEL2 ALLEGRO_KEY_6
 
-#define JOY_LP1 0
-#define JOY_HP1 1
-#define JOY_LK1 2
-#define JOY_HK1 3
-#define JOY_START1 4
-#define JOY_SEL1 5
+#define JOY_A1 0
+#define JOY_B1 1
+#define JOY_START1 2
+#define JOY_SEL1 3
 
-#define JOY_LP2 0
-#define JOY_HP2 1
-#define JOY_LK2 2
-#define JOY_HK2 3
-#define JOY_START2 4
-#define JOY_SEL2 5
+#define JOY_A2 0
+#define JOY_B2 1
+#define JOY_START2 2
+#define JOY_SEL2 3
 
 
 void Barge::setDefaultConfig()
@@ -479,17 +423,11 @@ void Barge::setDefaultConfig()
 	intStringer << KB_RIGHT1;
 	al_set_config_value(gameCfg,"keyboard","right1",intStringer.str().c_str());
 	intStringer.str("");
-	intStringer << KB_LP1;
-	al_set_config_value(gameCfg,"keyboard","lp1",intStringer.str().c_str());
+	intStringer << KB_A1;
+	al_set_config_value(gameCfg,"keyboard","a1",intStringer.str().c_str());
 	intStringer.str("");
-	intStringer << KB_HP1;
-	al_set_config_value(gameCfg,"keyboard","hp1",intStringer.str().c_str());
-	intStringer.str("");
-	intStringer << KB_LK1;
-	al_set_config_value(gameCfg,"keyboard","lk1",intStringer.str().c_str());
-	intStringer.str("");
-	intStringer << KB_HK1;
-	al_set_config_value(gameCfg,"keyboard","hk1",intStringer.str().c_str());
+	intStringer << KB_B1;
+	al_set_config_value(gameCfg,"keyboard","b1",intStringer.str().c_str());
 	intStringer.str("");
 	intStringer << KB_START1;
 	al_set_config_value(gameCfg,"keyboard","start1",intStringer.str().c_str());
@@ -497,18 +435,12 @@ void Barge::setDefaultConfig()
 	intStringer << KB_SEL1;
 	al_set_config_value(gameCfg,"keyboard","sel1",intStringer.str().c_str());
 	intStringer.str("");
-
-	intStringer << JOY_LP1;
-	al_set_config_value(gameCfg,"joy","lp1",intStringer.str().c_str());
+	
+	intStringer << JOY_A1;
+	al_set_config_value(gameCfg,"joy","a1",intStringer.str().c_str());
 	intStringer.str("");
-	intStringer << JOY_HP1;
-	al_set_config_value(gameCfg,"joy","hp1",intStringer.str().c_str());
-	intStringer.str("");
-	intStringer << JOY_LK1;
-	al_set_config_value(gameCfg,"joy","lk1",intStringer.str().c_str());
-	intStringer.str("");
-	intStringer << JOY_HK1;
-	al_set_config_value(gameCfg,"joy","hk1",intStringer.str().c_str());
+	intStringer << JOY_B1;
+	al_set_config_value(gameCfg,"joy","b1",intStringer.str().c_str());
 	intStringer.str("");
 	intStringer << JOY_START1;
 	al_set_config_value(gameCfg,"joy","start1",intStringer.str().c_str());
@@ -529,17 +461,11 @@ void Barge::setDefaultConfig()
 	intStringer << KB_RIGHT2;
 	al_set_config_value(gameCfg,"keyboard","right2",intStringer.str().c_str());
 	intStringer.str("");
-	intStringer << KB_LP2;
-	al_set_config_value(gameCfg,"keyboard","lp2",intStringer.str().c_str());
+	intStringer << KB_A2;
+	al_set_config_value(gameCfg,"keyboard","a2",intStringer.str().c_str());
 	intStringer.str("");
-	intStringer << KB_HP2;
-	al_set_config_value(gameCfg,"keyboard","hp2",intStringer.str().c_str());
-	intStringer.str("");
-	intStringer << KB_LK2;
-	al_set_config_value(gameCfg,"keyboard","lk2",intStringer.str().c_str());
-	intStringer.str("");
-	intStringer << KB_HK2;
-	al_set_config_value(gameCfg,"keyboard","hk2",intStringer.str().c_str());
+	intStringer << KB_B2;
+	al_set_config_value(gameCfg,"keyboard","b2",intStringer.str().c_str());
 	intStringer.str("");
 	intStringer << KB_START2;
 	al_set_config_value(gameCfg,"keyboard","start2",intStringer.str().c_str());
@@ -548,17 +474,11 @@ void Barge::setDefaultConfig()
 	al_set_config_value(gameCfg,"keyboard","sel2",intStringer.str().c_str());
 	intStringer.str("");
 
-	intStringer << JOY_LP2;
-	al_set_config_value(gameCfg,"joy","lp2",intStringer.str().c_str());
+	intStringer << JOY_A2;
+	al_set_config_value(gameCfg,"joy","a2",intStringer.str().c_str());
 	intStringer.str("");
-	intStringer << JOY_HP2;
-	al_set_config_value(gameCfg,"joy","hp2",intStringer.str().c_str());
-	intStringer.str("");
-	intStringer << JOY_LK2;
-	al_set_config_value(gameCfg,"joy","lk2",intStringer.str().c_str());
-	intStringer.str("");
-	intStringer << JOY_HK2;
-	al_set_config_value(gameCfg,"joy","hk2",intStringer.str().c_str());
+	intStringer << JOY_B2;
+	al_set_config_value(gameCfg,"joy","b2",intStringer.str().c_str());
 	intStringer.str("");
 	intStringer << JOY_START2;
 	al_set_config_value(gameCfg,"joy","start2",intStringer.str().c_str());

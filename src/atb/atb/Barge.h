@@ -22,8 +22,8 @@ class Barge
 public:
 
 	// Public facing inputs array
-	int p1keys[10];
-	int p2keys[10];
+	int p1keys[8];
+	int p2keys[8];
 
 	Barge(std::string fname);
 	~Barge();

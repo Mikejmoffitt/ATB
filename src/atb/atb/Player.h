@@ -16,6 +16,8 @@
 #define MIN_X 640+72
 #define MAX_X 320-72
 
+#define STAND_MAX 67
+
 #define BOUNDS 16
 
 #define STAGEWIDTH 640
@@ -41,8 +43,8 @@
 #define BLOCKLOWANIM 14
 #define REELANIM 15
 #define PREJUMPANIM 16
-#define LENIENCY 5
 
+#define LENIENCY 7
 
 #define DIR_INFLUENCE 0.55
 
@@ -64,10 +66,14 @@ public:
 	std::string name;
 	std::string displayName;
 	//Activates when ONLY direction pressed
-	int downQC,downForwardQC,forwardQC,downBackQC,backQC;
+	
+	int downQC,downForwardQC,downBackQC,backQC;
 	int forwardDP, downDP;
 	int downBDP, backDP;
-	
+
+	// Once true the attack is ineffective.
+	bool didHit;
+
 	// Check if other has the attacking hitbox (4) overlapping our 
 	// player's vuln boxes (1-3)
 	void getHit();
@@ -119,7 +125,7 @@ public:
 	// Game state variables
 	int health;
 
-	
+	bool neutralJump;
 	int hitfreeze; // pause all action
 	bool direction; // Right == true
 	bool crouching;
@@ -130,9 +136,13 @@ public:
 	double xPos;
 	double yPos;
 
+	void doAttack(int atkInput, int atkButton, int atkLocus);
+
 private:
 
-	
+	int attack_input;
+	int attack_button;
+	int attack_locus;
 
 	std::vector<std::string> strTokenize(std::string s, char delim);
 	std::vector<int> strToki(std::string s, char delim);
@@ -157,11 +167,12 @@ private:
 #define L_AIR 1
 #define L_AIRMOVING 2
 #define L_CROUCH 3
-#define L_SPECIAL 4
 
 #define HIT_HI 0
 #define HIT_MED 1
 #define HIT_LOW 2
+
+#define SLIDEFRICTION 0.1
 
 	// Regular meta stuff
 	int  a_enabled[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
@@ -179,6 +190,8 @@ private:
 	// Movement stuff!
 	double              a_knockBackVecX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
 	double              a_knockBackVecY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
+
+	// For the attacker only
 	std::vector<int>    a_vecStepDelay[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
 	std::vector<bool>   a_relativeVecX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
 	std::vector<bool>   a_relativeVecY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
@@ -200,10 +213,14 @@ private:
 	int    a_projectileX[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];
 	int    a_projectileY[INPUT_NUM][BUTTON_NUM][LOCUS_NUM];	
 
+	// Variables for attack vectors
+
 	// Animation indexes for standard anims
 	int stdAnimIndexes[NUM_STD_ANIMS];
 
 	bool isPlayer2;
+
+	bool hitInAir;
 
 	// Stored player properties
 	double fwdSpeed;

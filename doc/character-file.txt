@@ -94,11 +94,10 @@ Values for each:
 	upcharge - upwards charge
 	
 [locus]
-	ground - ground
+	ground - ground 
 	air - air
-	airmoving - air moving
-	crouch - crouch. Did any of this need explaining? 
-	special - special move, not at a place.
+	airmoving - air moving (not for specials)
+	crouch - crouch. Did any of this need explaining? (not for specials)
 
 [button]
 	p - light punch
