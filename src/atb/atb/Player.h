@@ -47,7 +47,7 @@
 #define PREJUMPANIM 16
 #define REELAIRANIM 17
 
-#define LENIENCY 7
+#define LENIENCY 11
 
 #define DIR_INFLUENCE 0.55
 

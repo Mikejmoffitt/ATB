@@ -612,6 +612,33 @@ void Player::handleInputs()
 			sprite->playAnimation(stdAnimIndexes[GETUPANIM]);
 		}
 	}
+	
+
+	if (vecY > 15)
+	{
+		vecY = 15;
+	}
+	if (vecY < -15)
+	{
+		vecY = -15;
+	}
+	if (vecX > 15)
+	{
+		vecX = 15;
+	}
+	if (vecX < -15)
+	{
+		vecX = -15;
+	}
+
+	if (slideX > 15)
+	{
+		slideX = 15;
+	}
+	if (slideX < -15)
+	{
+		slideX = -15;
+	}
 
 	if (doingNormal > 0)
 	{
@@ -990,21 +1017,21 @@ else if((*inputs)[DOWNKEY] > 0) //Just pressing down
 			}
 
 			// Figure out input
-			if (qcf > 0)
-			{
-				atkInput = I_QCF;
-			}
-			else if (qcb > 0)
-			{
-				atkInput = I_QCB;
-			}
-			else if (fdp > 0)
+			if (fdp > 0)
 			{
 				atkInput = I_FDP;
 			}
 			else if (bdp > 0)
 			{
 				atkInput = I_BDP;
+			}
+			else if (qcf > 0)
+			{
+				atkInput = I_QCF;
+			}
+			else if (qcb > 0)
+			{
+				atkInput = I_QCB;
 			}
 			else if (fcharge > 0)
 			{

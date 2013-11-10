@@ -1,4 +1,4 @@
-t#include "Sprite.h"
+#include "Sprite.h"
 
 void Sprite::blit(int x, int y, bool flip, bool tint)
 {

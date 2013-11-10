@@ -169,11 +169,11 @@ void Barge::poll()
 		{
 			joyDown = false;
 		
+		}
 			joyA = joyState.button[joyKeys1[0]];
 			joyB = joyState.button[joyKeys1[1]];
 			joyStart = joyState.button[joyKeys1[2]];
 			joySel = joyState.button[joyKeys1[3]];
-		}
 	}
 	
 	if (al_key_down(&keyState, kbKeys1[0]) || joyUp)
@@ -303,11 +303,11 @@ void Barge::poll()
 		{
 			joyDown = false;
 		
+		}
 			joyA = joyState.button[joyKeys1[0]];
 			joyB = joyState.button[joyKeys1[1]];
 			joyStart = joyState.button[joyKeys1[2]];
 			joySel = joyState.button[joyKeys1[3]];
-		}
 	}
 	
 	if (al_key_down(&keyState, kbKeys2[0]) || joyUp)
