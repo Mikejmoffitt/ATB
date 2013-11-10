@@ -2,3 +2,4 @@
 #define ANIM_DIR "/anim/"
 #define ANIM_FORMAT ".png"
 #define STAGE_DIR "./data/stage/"
+#define CHAR_PORT "/portrait"
