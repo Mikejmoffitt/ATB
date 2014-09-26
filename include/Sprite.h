@@ -13,9 +13,9 @@ instructed to be blitted somewhere on screen.
 #include <string>
 #include <iostream>
 #include <sstream>
-#include "allegro5\allegro5.h"
-#include "allegro5\allegro_primitives.h"
-#include "allegro5\allegro_image.h"
+#include "allegro5/allegro5.h"
+#include "allegro5/allegro_primitives.h"
+#include "allegro5/allegro_image.h"
 
 #include "Barge.h"
 #include "dirDefs.h"

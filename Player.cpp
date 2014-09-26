@@ -1282,7 +1282,7 @@ void Player::boundsPush()
 	}
 	if (other != NULL)
 	{
-		while (floor(xPos - other->xPos) > SCREENWIDTH-(BOUNDS*2))
+		while (int(xPos - other->xPos) > SCREENWIDTH-(BOUNDS*2))
 		{
 			xPos--;
 			other->xPos++;
@@ -1297,12 +1297,12 @@ void Player::animate()
 
 void Player::blit(int scrollX)
 {
-	sprite->blit(floor(xPos) - (PLAYERWIDTH/2) - scrollX,yPos-(PLAYERHEIGHT),(xPos>other->xPos),isPlayer2);
+	sprite->blit(int(xPos) - (PLAYERWIDTH/2) - scrollX,yPos-(PLAYERHEIGHT),(xPos>other->xPos),isPlayer2);
 }
 
 void Player::boxBlit(int scrollX)
 {
-	sprite->boxBlit(floor(xPos) - (PLAYERWIDTH/2) - scrollX,yPos-(PLAYERHEIGHT),!direction);
+	sprite->boxBlit(int(xPos) - (PLAYERWIDTH/2) - scrollX,yPos-(PLAYERHEIGHT),!direction);
 }
 
 bool Player::checkBox(int a, int b)
